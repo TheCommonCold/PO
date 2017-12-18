@@ -1,3 +1,5 @@
+package spolka;
+
 public class spolka {
     private String name;
     private int dataPierwszejWyceny[];

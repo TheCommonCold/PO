@@ -1,4 +1,6 @@
-public class funduszInwestycyjny extends podmiotKupujacy {
+package aktywa;
+
+public class aktywa {
     private String nazwa;
 
     public String getNazwa() {

@@ -1,5 +1,9 @@
+package portfel;
+
+import aktywa.akcja;
+
 public class stackAkcji extends stackAktyw {
-    private akcja akcja;
+    private aktywa.akcja akcja;
 
     public akcja getAkcja() {
         return akcja;

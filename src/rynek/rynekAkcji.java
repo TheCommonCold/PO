@@ -1,3 +1,6 @@
+package rynek;
+import aktywa.akcja;
+
 import java.util.*;
 public class rynekAkcji extends rynek{
     public Set<akcja> getListAkcji() {

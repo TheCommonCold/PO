@@ -1,3 +1,6 @@
+package kupujacy;
+import portfel.portfel;
+
 public class podmiotKupujacy {
     private String imie;
     private String nazwisko;

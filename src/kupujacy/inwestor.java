@@ -1,3 +1,5 @@
+package kupujacy;
+
 public class inwestor extends podmiotKupujacy {
     private int pesel;
     private int budzetInwestycyjny;

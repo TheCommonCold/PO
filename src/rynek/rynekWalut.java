@@ -1,3 +1,7 @@
+package rynek;
+
+import aktywa.waluta;
+
 import java.util.*;
 public class rynekWalut extends rynek {
     public Set<waluta> getListaWalut() {

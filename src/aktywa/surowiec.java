@@ -1,3 +1,5 @@
+package aktywa;
+
 public class surowiec extends aktywa {
     private String jednostkaHandlowa;
     private waluta waluta;

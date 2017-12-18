@@ -1,5 +1,9 @@
+package portfel;
+
+import aktywa.waluta;
+
 public class stackWalut extends stackAktyw{
-    private waluta waluta;
+    private aktywa.waluta waluta;
 
     public waluta getWaluta() {
         return waluta;

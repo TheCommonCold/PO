@@ -1,3 +1,6 @@
+package rynek;
+import aktywa.surowiec;
+
 import java.util.*;
 public class rynekSurowcow extends rynek {
     public Set<surowiec> getListSurowcow() {

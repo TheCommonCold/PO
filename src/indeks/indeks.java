@@ -1,3 +1,6 @@
+package indeks;
+import spolka.spolka;
+
 import java.util.*;
 public class indeks {
     private String nazwa;

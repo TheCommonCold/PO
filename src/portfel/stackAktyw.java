@@ -1,3 +1,5 @@
+package portfel;
+
 public class stackAktyw {
     private int ilosc;
 

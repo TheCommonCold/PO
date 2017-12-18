@@ -1,3 +1,5 @@
+package rynek;
+
 public class rynek {
     private String nazwa;
     private int marza;

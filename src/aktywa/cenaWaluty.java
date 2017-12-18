@@ -1,3 +1,5 @@
+package aktywa;
+
 public class cenaWaluty {
     private waluta waluta;
     private double cenaKupna;

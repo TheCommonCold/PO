@@ -1,3 +1,5 @@
+package aktywa;
+import indeks.indeks;
 import java.util.*;
 public class akcja extends aktywa {
     private String kraj;

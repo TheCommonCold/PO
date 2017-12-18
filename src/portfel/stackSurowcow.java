@@ -1,5 +1,9 @@
+package portfel;
+
+import aktywa.surowiec;
+
 public class stackSurowcow extends stackAktyw {
-    private surowiec surowiec;
+    private aktywa.surowiec surowiec;
 
     public surowiec getSurowiec() {
         return surowiec;

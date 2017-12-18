@@ -1,3 +1,5 @@
+package portfel;
+
 import java.util.*;
 public class portfel {
     private Set<stackAkcji> akcje;
