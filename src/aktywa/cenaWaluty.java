@@ -2,8 +2,14 @@ package aktywa;
 
 public class cenaWaluty {
     private waluta waluta;
-    private double cenaKupna;
-    private double cenaSprzedazy;
+    private float cenaKupna;
+    private float cenaSprzedazy;
+
+    cenaWaluty(waluta waluta,float cenaKupna, float cenaSprzedazy){
+        this.waluta=waluta;
+        this.cenaKupna=cenaKupna;
+        this.cenaSprzedazy=cenaSprzedazy;
+    }
 
     public waluta getWaluta() {
         return waluta;
@@ -13,19 +19,19 @@ public class cenaWaluty {
         this.waluta = waluta;
     }
 
-    public double getCenaKupna() {
+    public float getCenaKupna() {
         return cenaKupna;
     }
 
-    public void setCenaKupna(double cenaKupna) {
+    public void setCenaKupna(float cenaKupna) {
         this.cenaKupna = cenaKupna;
     }
 
-    public double getCenaSprzedazy() {
+    public float getCenaSprzedazy() {
         return cenaSprzedazy;
     }
 
-    public void setCenaSprzedazy(double cenaSprzedazy) {
+    public void setCenaSprzedazy(float cenaSprzedazy) {
         this.cenaSprzedazy = cenaSprzedazy;
     }
 }

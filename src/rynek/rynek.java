@@ -2,7 +2,7 @@ package rynek;
 
 public class rynek {
     private String nazwa;
-    private int marza;
+    private float marza;
 
     public String getNazwa() {
         return nazwa;
@@ -12,11 +12,11 @@ public class rynek {
         this.nazwa = nazwa;
     }
 
-    public int getMarza() {
+    public float getMarza() {
         return marza;
     }
 
-    public void setMarza(int marza) {
+    public void setMarza(float marza) {
         this.marza = marza;
     }
 }

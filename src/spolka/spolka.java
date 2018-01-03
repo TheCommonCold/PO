@@ -1,11 +1,24 @@
 package spolka;
+import aktywa.surowiec;
+import aktywa.waluta;
+import aktywa.akcje;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import kupujacy.inwestor;
+import portfel.stackAkcji;
+import rynek.rynekAkcji;
+
+import java.util.Date;
+import java.util.Random;
 
 public class spolka {
     private String name;
-    private int dataPierwszejWyceny[];
+    private Date dataPierwszejWyceny;
+    private float wartosc;
     private float kursOtwarcia;
     private float minimalnyKurs;
     private float maksymalnyKurs;
+    private akcje akcja;
     private int liczbaAkcji;
     private float zysk;
     private float przychod;
@@ -13,20 +26,73 @@ public class spolka {
     private float kapitalZakladowy;
     private int wolumen;
 
+    public akcje getAkcja() {
+        return akcja;
+    }
+
+    public void setAkcja(akcje akcja) {
+        this.akcja = akcja;
+    }
+
+    public spolka(ObservableList<rynekAkcji> rynkiAkcjiData, ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData, ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
+        Random generator = new Random();
+        name=Integer.toString(generator.nextInt());
+        defaultSpolkaConstructor(rynkiAkcjiData,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
+    }
+
+    public spolka(ObservableList<rynekAkcji> rynkiAkcjiData,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,String nazwa){
+        this.name=nazwa;
+        defaultSpolkaConstructor(rynkiAkcjiData,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
+    }
+
+    public void defaultSpolkaConstructor(ObservableList<rynekAkcji> rynkiAkcjiData,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
+        for(int i =0;i<ratioKupujacychDoAktyw;i++){
+            inwestorData.add(new inwestor(surowiecData,walutaData));
+        }
+        Random generator = new Random();
+        int ktoryRynek = generator.nextInt(rynkiAkcjiData.size());
+        int i=0;
+        akcja=new akcje(this);
+        for(rynekAkcji currentRynekAkcji:rynkiAkcjiData){
+            if(i==ktoryRynek){
+                currentRynekAkcji.addNewAkcja(akcja);
+                break;
+            }
+            i++;
+        }
+        dataPierwszejWyceny = new Date();
+        kursOtwarcia=generator.nextFloat()+generator.nextInt(500);
+        minimalnyKurs=kursOtwarcia;
+        maksymalnyKurs=kursOtwarcia;
+        wartosc=kursOtwarcia;
+        akcjeData.add(akcja);
+        zysk=0;
+        przychod=0;
+        liczbaAkcji=0;
+        kapitalWlasny=generator.nextFloat()+generator.nextInt(1000000000);
+        kapitalZakladowy=generator.nextFloat()+generator.nextInt(100000000);
+        obroty=0;
+        for(inwestor currentInwestor:inwestorData){
+            int temp=generator.nextInt(100000/inwestorData.size());
+            currentInwestor.getAssets().addNowaAkcja(new stackAkcji(akcja,temp));
+            liczbaAkcji+=temp;
+        }
+    }
+
+    public Date getDataPierwszejWyceny() {
+        return dataPierwszejWyceny;
+    }
+
+    public void setDataPierwszejWyceny(Date dataPierwszejWyceny) {
+        this.dataPierwszejWyceny = dataPierwszejWyceny;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int[] getDataPierwszejWyceny() {
-        return dataPierwszejWyceny;
-    }
-
-    public void setDataPierwszejWyceny(int[] dataPierwszejWyceny) {
-        this.dataPierwszejWyceny = dataPierwszejWyceny;
     }
 
     public float getKursOtwarcia() {
@@ -107,6 +173,14 @@ public class spolka {
 
     public void setObroty(float obroty) {
         this.obroty = obroty;
+    }
+
+    public float getWartosc() {
+        return wartosc;
+    }
+
+    public void setWartosc(float wartosc) {
+        this.wartosc = wartosc;
     }
 
     private float obroty;

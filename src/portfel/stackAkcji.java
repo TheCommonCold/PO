@@ -1,15 +1,21 @@
 package portfel;
 
-import aktywa.akcja;
+import aktywa.akcje;
 
 public class stackAkcji extends stackAktyw {
-    private aktywa.akcja akcja;
 
-    public akcja getAkcja() {
+    public stackAkcji(akcje akcja , int ilosc){
+        this.akcja=akcja;
+        setIlosc(ilosc);
+    }
+
+    private akcje akcja;
+
+    public akcje getAkcja() {
         return akcja;
     }
 
-    public void setAkcja(akcja akcja) {
+    public void setAkcja(akcje akcja) {
         this.akcja = akcja;
     }
 }

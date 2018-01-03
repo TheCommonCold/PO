@@ -1,11 +1,43 @@
 package aktywa;
 
+import javafx.collections.ObservableList;
+
+import java.util.Random;
+
 public class surowiec extends aktywa {
     private String jednostkaHandlowa;
     private waluta waluta;
-    private int wartosc;
-    private int wartoscMinimalna;
-    private int wartoscMaksymalna;
+    private float wartosc;
+    private float wartoscMinimalna;
+    private float wartoscMaksymalna;
+
+    public surowiec(ObservableList<waluta> walutaData){
+        Random generator = new Random();
+        setNazwa(Integer.toString(generator.nextInt()));
+        defaultSurowiecConstructor(walutaData);
+    }
+
+    public surowiec(ObservableList<waluta> walutaData, String nazwa){
+        setNazwa(nazwa);
+        defaultSurowiecConstructor(walutaData);
+    }
+
+    public void defaultSurowiecConstructor(ObservableList<waluta> walutaData){
+        Random generator = new Random();
+        jednostkaHandlowa = Integer.toString(generator.nextInt());
+        int stop = generator.nextInt(walutaData.size());
+        int i=0;
+        for(waluta waluta:walutaData){
+            if(i==stop){
+                this.waluta=waluta;
+                break;
+            }
+            i++;
+        }
+        wartosc = generator.nextInt(10000)+generator.nextFloat();
+        wartoscMinimalna = wartosc;
+        wartoscMaksymalna = wartosc;
+    }
 
     public String getJednostkaHandlowa() {
         return jednostkaHandlowa;
@@ -23,7 +55,7 @@ public class surowiec extends aktywa {
         this.waluta = waluta;
     }
 
-    public int getWartosc() {
+    public float getWartosc() {
         return wartosc;
     }
 
@@ -31,7 +63,7 @@ public class surowiec extends aktywa {
         this.wartosc = wartosc;
     }
 
-    public int getWartoscMinimalna() {
+    public float getWartoscMinimalna() {
         return wartoscMinimalna;
     }
 
@@ -39,7 +71,7 @@ public class surowiec extends aktywa {
         this.wartoscMinimalna = wartoscMinimalna;
     }
 
-    public int getWartoscMaksymalna() {
+    public float getWartoscMaksymalna() {
         return wartoscMaksymalna;
     }
 

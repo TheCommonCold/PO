@@ -1,13 +1,21 @@
 package portfel;
 
 public class stackAktyw {
-    private int ilosc;
+    private float ilosc;
 
-    public int getIlosc() {
+    public float getIlosc() {
         return ilosc;
     }
 
-    public void setIlosc(int ilosc) {
+    public void setIlosc(float ilosc) {
         this.ilosc = ilosc;
+    }
+
+    public void subtractIlosc(float liczba){
+        this.ilosc-=liczba;
+    }
+
+    public void addIlosc(float liczba){
+        this.ilosc+=liczba;
     }
 }
