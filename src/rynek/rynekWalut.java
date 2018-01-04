@@ -8,36 +8,22 @@ import javafx.collections.ObservableList;
 import java.util.*;
 public class rynekWalut extends rynek {
 
-    public rynekWalut(ObservableList<waluta> walutaData){
+    public rynekWalut(){
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
-        defaultRynekWalutConstructor(walutaData);
+        defaultRynekWalutConstructor();
     }
 
-    public rynekWalut(ObservableList<waluta> walutaData, String nazwa){
+    public rynekWalut(String nazwa){
         setNazwa(nazwa);
-        defaultRynekWalutConstructor(walutaData);
+        defaultRynekWalutConstructor();
     }
 
-    public void defaultRynekWalutConstructor(ObservableList<waluta> walutaData){
+    public void defaultRynekWalutConstructor(){
         Random generator = new Random();
         setMarza(generator.nextFloat()/4);
-        if(walutaData.size()!=0) {
-            for (waluta currentWaluta : walutaData) {
-                addNewWaluta(currentWaluta);
-            }
-        }
     }
 
-    public void updateRynekWalut(ObservableList<waluta> walutaData){
-        if(this.getListaWalut().size()<walutaData.size()){
-            for(waluta currentWaluta:walutaData){
-                if(!this.getListaWalut().contains(currentWaluta)){
-                    this.addNewWaluta(currentWaluta.getNazwa());
-                }
-            }
-        }
-    }
 
     public void addNewWaluta(waluta waluta){
         Random generator = new Random();
@@ -57,10 +43,6 @@ public class rynekWalut extends rynek {
             listaCen.add(addedWaluta);
         }
         else listaCen.add(new cenyWalut(waluta));
-    }
-
-    public void addNewWaluta(String nazwa){
-        listaWalut.add(new waluta(getListaWalut(),nazwa));
     }
 
     public Set<waluta> getListaWalut() {

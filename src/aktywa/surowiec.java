@@ -1,6 +1,7 @@
 package aktywa;
 
 import javafx.collections.ObservableList;
+import rynek.rynekSurowcow;
 
 import java.util.Random;
 
@@ -11,18 +12,18 @@ public class surowiec extends aktywa {
     private float wartoscMinimalna;
     private float wartoscMaksymalna;
 
-    public surowiec(ObservableList<waluta> walutaData){
+    public surowiec(rynekSurowcow rynek, ObservableList<waluta> walutaData){
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
-        defaultSurowiecConstructor(walutaData);
+        defaultSurowiecConstructor(rynek,walutaData);
     }
 
-    public surowiec(ObservableList<waluta> walutaData, String nazwa){
+    public surowiec(rynekSurowcow rynek,ObservableList<waluta> walutaData, String nazwa){
         setNazwa(nazwa);
-        defaultSurowiecConstructor(walutaData);
+        defaultSurowiecConstructor(rynek,walutaData);
     }
 
-    public void defaultSurowiecConstructor(ObservableList<waluta> walutaData){
+    public void defaultSurowiecConstructor(rynekSurowcow rynek,ObservableList<waluta> walutaData){
         Random generator = new Random();
         jednostkaHandlowa = Integer.toString(generator.nextInt());
         int stop = generator.nextInt(walutaData.size());
@@ -34,9 +35,11 @@ public class surowiec extends aktywa {
             }
             i++;
         }
+        setRynek(rynek);
         wartosc = generator.nextInt(10000)+generator.nextFloat();
         wartoscMinimalna = wartosc;
         wartoscMaksymalna = wartosc;
+        rynek.addNewSurowiec(this);
     }
 
     public String getJednostkaHandlowa() {

@@ -34,32 +34,23 @@ public class spolka {
         this.akcja = akcja;
     }
 
-    public spolka(ObservableList<rynekAkcji> rynkiAkcjiData, ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData, ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
+    public spolka(rynekAkcji rynek, ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData, ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
         Random generator = new Random();
         name=Integer.toString(generator.nextInt());
-        defaultSpolkaConstructor(rynkiAkcjiData,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
+        defaultSpolkaConstructor(rynek,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
     }
 
-    public spolka(ObservableList<rynekAkcji> rynkiAkcjiData,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,String nazwa){
+    public spolka(rynekAkcji rynek,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,String nazwa){
         this.name=nazwa;
-        defaultSpolkaConstructor(rynkiAkcjiData,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
+        defaultSpolkaConstructor(rynek,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
     }
 
-    public void defaultSpolkaConstructor(ObservableList<rynekAkcji> rynkiAkcjiData,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
+    public void defaultSpolkaConstructor(rynekAkcji rynek,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
         for(int i =0;i<ratioKupujacychDoAktyw;i++){
             inwestorData.add(new inwestor(surowiecData,walutaData));
         }
         Random generator = new Random();
-        int ktoryRynek = generator.nextInt(rynkiAkcjiData.size());
-        int i=0;
-        akcja=new akcje(this);
-        for(rynekAkcji currentRynekAkcji:rynkiAkcjiData){
-            if(i==ktoryRynek){
-                currentRynekAkcji.addNewAkcja(akcja);
-                break;
-            }
-            i++;
-        }
+        akcja=new akcje(rynek,this);
         dataPierwszejWyceny = new Date();
         kursOtwarcia=generator.nextFloat()+generator.nextInt(500);
         minimalnyKurs=kursOtwarcia;

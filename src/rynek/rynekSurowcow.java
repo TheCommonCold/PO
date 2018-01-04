@@ -6,23 +6,20 @@ import javafx.collections.ObservableList;
 import java.util.*;
 public class rynekSurowcow extends rynek {
 
-    public rynekSurowcow(ObservableList<surowiec> surowceData){
+    public rynekSurowcow(){
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
-        defaultRynekSurowcowConstructor(surowceData);
+        defaultRynekSurowcowConstructor();
     }
 
-    public rynekSurowcow(ObservableList<surowiec> surowceData,String nazwa){
+    public rynekSurowcow(String nazwa){
         Random generator = new Random();
-        defaultRynekSurowcowConstructor(surowceData);
+        defaultRynekSurowcowConstructor();
     }
 
-    public void defaultRynekSurowcowConstructor(ObservableList<surowiec> surowceData){
+    public void defaultRynekSurowcowConstructor(){
         Random generator = new Random();
         setMarza(generator.nextFloat()/4);
-        for(surowiec currentSurowiec:surowceData){
-            addNewSurowiec(currentSurowiec);
-        }
     }
 
     public void addNewSurowiec(surowiec surowiec){

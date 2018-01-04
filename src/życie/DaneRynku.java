@@ -1,3 +1,4 @@
+package życie;
 import aktywa.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,11 +24,6 @@ public class DaneRynku {
     private int liczbaAktyw =0;
     private int liczbaWalut =0;
 
-    public void updateRynkiWalutData(){
-        for(rynekWalut currentRynekWalut:rynkiWalutData){
-            currentRynekWalut.updateRynekWalut(walutaData);
-        }
-    }
 
     public zleceniaKupnaSprzedazy getZlecenia() {
         return zlecenia;
@@ -58,11 +54,8 @@ public class DaneRynku {
                     if (currentSprzedaz.getChceSprzedac() instanceof waluta && currentSprzedaz.getChceKupic() instanceof waluta && currentKupno.getChceSprzedac() instanceof waluta && currentKupno.getChceKupic() instanceof waluta) {
                         iloscSprzedajacego = currentSprzedaz.getZlecacz().getAssets().getStackWaluty(currentSprzedaz.getChceSprzedac()).getIlosc();
                         iloscKupujacego = currentKupno.getZlecacz().getAssets().getStackWaluty(currentKupno.getChceSprzedac()).getIlosc();
-                        int ktoryRynek = generator.nextInt(rynkiWalutData.size());
-                        int i = 0;
                         float przelicznik = 1;
                         for (rynekWalut currentRynekWalut : rynkiWalutData) {
-                            if (ktoryRynek == i) {
                                 for (cenyWalut currentCenyWalut : currentRynekWalut.getListaCen()) {
                                     if (currentCenyWalut.getWaluta().equals(currentSprzedaz.getChceSprzedac())) {
                                         for (cenaWaluty currentCenaWaluta : currentCenyWalut.getWartosc()) {
@@ -95,17 +88,11 @@ public class DaneRynku {
                                 currentKupno.getZlecacz().getAssets().getStackWaluty(currentKupno.getChceKupic()).addIlosc(ilosc);
                                 currentSprzedaz.getZlecacz().getAssets().getStackWaluty(currentSprzedaz.getChceKupic()).addIlosc(ilosc / przelicznik);
                                 currentKupno.getZlecacz().getAssets().getStackWaluty(currentKupno.getChceSprzedac()).subtractIlosc(ilosc / przelicznik);
-                            }
-                            i++;
                         }
                     }
                     if(currentSprzedaz.getChceSprzedac() instanceof surowiec && currentSprzedaz.getChceKupic() instanceof waluta && currentKupno.getChceSprzedac() instanceof waluta && currentKupno.getChceKupic() instanceof surowiec){
                         iloscSprzedajacego = currentSprzedaz.getZlecacz().getAssets().getStackSurowcow(currentSprzedaz.getChceSprzedac()).getIlosc();
                         iloscKupujacego = currentKupno.getZlecacz().getAssets().getStackWaluty(currentKupno.getChceSprzedac()).getIlosc();
-                        int ktoryRynek = generator.nextInt(rynkiSurowcowData.size());
-                        int i=0;
-                        for(rynekSurowcow currentRynekSurowcow: rynkiSurowcowData){
-                            if(ktoryRynek==i){
                                 float przelicznik = ((surowiec) currentSprzedaz.getChceSprzedac()).getWartosc();
                                 float ilosc=0;
                                 if(iloscSprzedajacego<iloscKupujacego/przelicznik){
@@ -128,9 +115,6 @@ public class DaneRynku {
                                 currentKupno.getZlecacz().getAssets().getStackSurowcow(currentKupno.getChceKupic()).addIlosc(ilosc);
                                 currentSprzedaz.getZlecacz().getAssets().getStackWaluty(currentSprzedaz.getChceKupic()).addIlosc(ilosc*przelicznik);
                                 currentKupno.getZlecacz().getAssets().getStackWaluty(currentKupno.getChceSprzedac()).subtractIlosc(ilosc*przelicznik);
-                            }
-                            i++;
-                        }
                     }
                     if(currentSprzedaz.getChceSprzedac() instanceof akcje && currentSprzedaz.getChceKupic() instanceof waluta && currentKupno.getChceSprzedac() instanceof waluta && currentKupno.getChceKupic() instanceof akcje){
                         iloscSprzedajacego = currentSprzedaz.getZlecacz().getAssets().getStackAkcji(currentSprzedaz.getChceSprzedac()).getIlosc();

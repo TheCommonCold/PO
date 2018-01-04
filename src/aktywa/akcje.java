@@ -1,4 +1,5 @@
 package aktywa;
+import rynek.rynekAkcji;
 import spolka.spolka;
 import java.util.*;
 public class akcje extends aktywa {
@@ -10,9 +11,11 @@ public class akcje extends aktywa {
         this.spolka = spolka;
     }
 
-    public akcje(spolka spolka){
+    public akcje(rynekAkcji rynek, spolka spolka){
         this.spolka=spolka;
         setNazwa(spolka.getName());
+        setRynek(rynek);
+        rynek.addNewAkcja(this);
     }
 
     private spolka spolka;
