@@ -1,11 +1,14 @@
 package aktywa;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class cenyWalut {
     private waluta waluta;
-    private Set<cenaWaluty> wartosc = new HashSet<>();
+    private ObservableList<cenaWaluty> wartosc = FXCollections.observableArrayList();;
 
     public cenyWalut(waluta waluta){
         this.waluta = waluta;
@@ -23,11 +26,11 @@ public class cenyWalut {
         this.waluta = waluta;
     }
 
-    public Set<cenaWaluty> getWartosc() {
+    public ObservableList<cenaWaluty>  getWartosc() {
         return wartosc;
     }
 
-    public void setWartosc(Set<cenaWaluty> wartosc) {
+    public void setWartosc(ObservableList<cenaWaluty>  wartosc) {
         this.wartosc = wartosc;
     }
 }

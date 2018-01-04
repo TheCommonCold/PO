@@ -1,5 +1,7 @@
 package aktywa;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class cenaWaluty {
     private waluta waluta;
     private float cenaKupna;
@@ -34,4 +36,12 @@ public class cenaWaluty {
     public void setCenaSprzedazy(float cenaSprzedazy) {
         this.cenaSprzedazy = cenaSprzedazy;
     }
+
+    public SimpleStringProperty getCenaKupnaProperty(){
+        return new SimpleStringProperty(Float.toString(cenaKupna));
+    }
+    public SimpleStringProperty getCenaSprzedazyProperty(){
+        return new SimpleStringProperty(Float.toString(cenaSprzedazy));
+    }
+
 }

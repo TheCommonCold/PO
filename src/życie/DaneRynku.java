@@ -12,6 +12,7 @@ import spolka.spolka;
 import java.util.Random;
 
 public class DaneRynku {
+    private ObservableList<aktywa>aktywaData = FXCollections.observableArrayList();
     private ObservableList<rynekWalut> rynkiWalutData = FXCollections.observableArrayList();
     private ObservableList<rynekSurowcow> rynkiSurowcowData = FXCollections.observableArrayList();
     private ObservableList<rynekAkcji> rynkiAkcjiData= FXCollections.observableArrayList();
@@ -173,14 +174,26 @@ public class DaneRynku {
 
     public void addwalutaData(waluta waluta){
         walutaData.add(waluta);
+        aktywaData.add(waluta);
     }
 
     public void addsurowiecData(surowiec surowiec){
         surowiecData.add(surowiec);
+        aktywaData.add(surowiec);
+    }
+
+    public ObservableList<aktywa> getAktywaData() {
+        return aktywaData;
+    }
+
+    public void setAktywaData(ObservableList<aktywa> aktywaData) {
+        this.aktywaData = aktywaData;
     }
 
     public void addspolkaData(spolka spolka){
         spolkaData.add(spolka);
+
+        aktywaData.add(spolka.getAkcja());
     }
 
     public void addinwestorData(inwestor inwestor){

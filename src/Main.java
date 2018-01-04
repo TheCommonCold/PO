@@ -1,6 +1,7 @@
 import java.io.IOException;
 
-import GUI.walutaController;
+import spolka.spolka;
+import GUI.aktywaController;
 import aktywa.cenyWalut;
 import aktywa.waluta;
 import kupujacy.inwestor;
@@ -8,6 +9,7 @@ import portfel.stackAkcji;
 import portfel.stackSurowcow;
 import portfel.stackWalut;
 import rynek.rynekAkcji;
+import rynek.rynekSurowcow;
 import rynek.rynekWalut;
 import aktywa.cenaWaluty;
 import aktywa.surowiec;
@@ -32,12 +34,23 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
-        daneRynku.addRynkiWalutData(new rynekWalut("Rynek1"));
+        daneRynku.addRynkiWalutData(new rynekWalut("Forex"));
+        daneRynku.addRynkiSurowiecData(new rynekSurowcow("Rynek1"));
         rynekWalut rynek = new rynekWalut();
         for(rynekWalut currentRynek:daneRynku.getRynkiWalutData())rynek=currentRynek;
         daneRynku.addwalutaData(new waluta(rynek,"Dollar"));
         daneRynku.addwalutaData(new waluta(rynek,"Pesos"));
         daneRynku.addwalutaData(new waluta(rynek,"Schmeckle"));
+        rynekSurowcow rynekSurowcow = new rynekSurowcow();
+        for(rynekSurowcow currentRynek:daneRynku.getRynkiSurowcowData())rynekSurowcow=currentRynek;
+        daneRynku.addsurowiecData(new surowiec(rynekSurowcow,daneRynku.getWalutaData(),"memy"));
+        daneRynku.addsurowiecData(new surowiec(rynekSurowcow,daneRynku.getWalutaData(),"Zloto"));
+        daneRynku.addRynkiAkcjiData(new rynekAkcji(daneRynku.getWalutaData(),"Rynek1"));
+        rynekAkcji rynekAkcji=new rynekAkcji(daneRynku.getWalutaData());
+        for(rynekAkcji currentRynek:daneRynku.getRynkiAkcjiData())rynekAkcji=currentRynek;
+        daneRynku.addspolkaData(new spolka(rynekAkcji,daneRynku.getInwestorData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),"Apple"));
+
+        debugRynekWalut();
         initGUI();
         walutaCreator();
         Scanner input = new Scanner(System.in);
@@ -200,11 +213,11 @@ public class Main extends Application {
     public void walutaCreator() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("GUI/walutaCreator.fxml"));
-            AnchorPane walutaCreator = (AnchorPane) loader.load();
-            walutaController cont = loader.getController();
+            loader.setLocation(Main.class.getResource("GUI/aktywaOverview.fxml"));
+            AnchorPane aktywaOverview = (AnchorPane) loader.load();
+            aktywaController cont = loader.getController();
             cont.setDaneRynku(this.daneRynku);
-            GUI.setCenter(walutaCreator);
+            GUI.setCenter(aktywaOverview);
         } catch (IOException e) {
             e.printStackTrace();
         }

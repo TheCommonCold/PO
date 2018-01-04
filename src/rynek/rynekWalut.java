@@ -3,6 +3,7 @@ package rynek;
 import aktywa.cenaWaluty;
 import aktywa.cenyWalut;
 import aktywa.waluta;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.*;
@@ -22,6 +23,15 @@ public class rynekWalut extends rynek {
     public void defaultRynekWalutConstructor(){
         Random generator = new Random();
         setMarza(generator.nextFloat()/4);
+    }
+
+    public cenyWalut getCenaWaluty(waluta waluta){
+        for(cenyWalut currentCenyWalut:listaCen){
+            if(currentCenyWalut.getWaluta().equals(waluta)){
+                return currentCenyWalut;
+            }
+        }
+        return null;
     }
 
 
@@ -55,7 +65,7 @@ public class rynekWalut extends rynek {
 
     private Set<waluta> listaWalut= new HashSet<>();
 
-    private Set<cenyWalut> listaCen= new HashSet<>();
+    private  Set<cenyWalut> listaCen= new HashSet<>();
 
     public Set<cenyWalut> getListaCen() {
         return listaCen;
