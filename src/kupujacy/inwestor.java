@@ -1,7 +1,10 @@
 package kupujacy;
 
+import Nazwy.LosoweNazwy;
 import aktywa.surowiec;
 import aktywa.waluta;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import portfel.portfel;
 import portfel.stackSurowcow;
@@ -12,10 +15,9 @@ import java.util.Random;
 public class inwestor extends podmiotKupujacy {
     private double pesel;
 
-    public inwestor(ObservableList<surowiec> surowiecData,ObservableList<waluta> walutaData){
-        Random generator = new Random();
-        setImie(Integer.toString(generator.nextInt()));
-        setNazwisko(Integer.toString(generator.nextInt()));
+    public inwestor(ObservableList<surowiec> surowiecData, ObservableList<waluta> walutaData, LosoweNazwy nazwy){
+        setImie(nazwy.getImieInwestora());
+        setNazwisko(nazwy.getNazwiskoInwestora());
         defaultInwestorConstructor(surowiecData,walutaData);
     }
 
@@ -52,5 +54,7 @@ public class inwestor extends podmiotKupujacy {
     public void setPesel(double pesel) {
         this.pesel = pesel;
     }
+
+    public SimpleStringProperty getPeselProperty(){return new SimpleStringProperty(Double.toString(pesel));}
 
 }

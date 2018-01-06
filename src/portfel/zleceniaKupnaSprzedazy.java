@@ -1,7 +1,6 @@
 package portfel;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class zleceniaKupnaSprzedazy {
     ArrayList<zlecenie> zleceniaKupna = new ArrayList<zlecenie>();

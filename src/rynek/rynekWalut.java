@@ -1,11 +1,11 @@
 package rynek;
 
-import aktywa.cenaWaluty;
 import aktywa.cenyWalut;
 import aktywa.waluta;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 public class rynekWalut extends rynek {
 

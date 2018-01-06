@@ -1,6 +1,7 @@
 package portfel;
 
 import aktywa.waluta;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Random;
 

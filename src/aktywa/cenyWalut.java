@@ -3,9 +3,6 @@ package aktywa;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class cenyWalut {
     private waluta waluta;
     private ObservableList<cenaWaluty> wartosc = FXCollections.observableArrayList();;

@@ -1,6 +1,5 @@
 package aktywa;
 
-import javafx.collections.ObservableList;
 import rynek.rynekWalut;
 
 import java.util.*;

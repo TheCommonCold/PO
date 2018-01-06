@@ -1,7 +1,7 @@
 package aktywa;
 import rynek.rynekAkcji;
 import spolka.spolka;
-import java.util.*;
+
 public class akcje extends aktywa {
     public spolka getSpolka() {
         return spolka;

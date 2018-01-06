@@ -1,15 +1,19 @@
 package życie;
+import Nazwy.LosoweNazwy;
 import aktywa.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import kupujacy.inwestor;
 import portfel.*;
+import rynek.rynek;
 import rynek.rynekAkcji;
 import rynek.rynekSurowcow;
 import rynek.rynekWalut;
 import spolka.spolka;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class DaneRynku {
     private ObservableList<aktywa>aktywaData = FXCollections.observableArrayList();
@@ -21,7 +25,9 @@ public class DaneRynku {
     private ObservableList<surowiec> surowiecData= FXCollections.observableArrayList();
     private ObservableList<spolka> spolkaData= FXCollections.observableArrayList();
     private ObservableList<inwestor> inwestorData= FXCollections.observableArrayList();
+    private ObservableList<rynek> rynekData = FXCollections.observableArrayList();
     private zleceniaKupnaSprzedazy zlecenia=new zleceniaKupnaSprzedazy();
+    private LosoweNazwy nazwy = new LosoweNazwy();
     private int liczbaAktyw =0;
     private int liczbaWalut =0;
 
@@ -162,14 +168,17 @@ public class DaneRynku {
 
     public void addRynkiSurowiecData(rynekSurowcow rynekSurowcow){
         rynkiSurowcowData.add(rynekSurowcow);
+        rynekData.add(rynekSurowcow);
     }
 
     public void addRynkiWalutData(rynekWalut rynekWalut){
         rynkiWalutData.add(rynekWalut);
+        rynekData.add(rynekWalut);
     }
 
     public void addRynkiAkcjiData(rynekAkcji rynekAkcji){
         rynkiAkcjiData.add(rynekAkcji);
+        rynekData.add(rynekAkcji);
     }
 
     public void addwalutaData(waluta waluta){
@@ -195,6 +204,7 @@ public class DaneRynku {
 
         aktywaData.add(spolka.getAkcja());
     }
+
 
     public void addinwestorData(inwestor inwestor){
         inwestorData.add(inwestor);
@@ -287,5 +297,47 @@ public class DaneRynku {
     public void setRatioKupujacychDoAktyw(int ratioKupujacychDoAktyw) {
         this.ratioKupujacychDoAktyw = ratioKupujacychDoAktyw;
 
+    }
+
+    public LosoweNazwy getNazwy() {
+        return nazwy;
+    }
+
+    public void setNazwy(LosoweNazwy nazwy) {
+        this.nazwy = nazwy;
+    }
+
+    public ObservableList<rynek> getRynekData() {
+        return rynekData;
+    }
+
+    public void setRynekData(ObservableList<rynek> rynekData) {
+        this.rynekData = rynekData;
+    }
+
+    public void logicLoop(){
+        new Thread(new Runnable(){
+            public void run(){
+                while(1>0){
+                    setLiczbaAktyw(getWalutaData().size()+getSurowiecData().size()+getSpolkaData().size());
+                    setLiczbaKupujacych(getInwestorData().size());
+                    setLiczbaWalut(getWalutaData().size());
+                    if(getLiczbaAktyw()*getRatioKupujacychDoAktyw()>getLiczbaKupujacych()){
+                        for(int i = getLiczbaKupujacych();i<getLiczbaAktyw()*getRatioKupujacychDoAktyw();i++){
+                            addinwestorData(new inwestor(getSurowiecData(),getWalutaData(),nazwy));
+                        }
+                    }
+                    kupowanie();
+                    sprzedawanie();
+                    wykonajOperacjeKupnaSprzedazy();
+                    getZlecenia().resetZlecenia();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 }

@@ -1,9 +1,7 @@
 package kupujacy;
 import aktywa.surowiec;
 import aktywa.akcje;
-import aktywa.aktywa;
-import javafx.collections.ObservableList;
-import rynek.rynek;
+import javafx.beans.property.SimpleStringProperty;
 import rynek.rynekWalut;
 import rynek.rynekAkcji;
 import portfel.portfel;
@@ -127,5 +125,13 @@ public class podmiotKupujacy extends Thread {
                 }
             }
         }
+    }
+
+    public SimpleStringProperty getImieProperty(){
+        return new SimpleStringProperty(imie);
+    }
+
+    public SimpleStringProperty getNazwiskoProperty(){
+        return new SimpleStringProperty(nazwisko);
     }
 }

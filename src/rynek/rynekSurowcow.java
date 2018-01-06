@@ -1,7 +1,5 @@
 package rynek;
 import aktywa.surowiec;
-import aktywa.waluta;
-import javafx.collections.ObservableList;
 
 import java.util.*;
 public class rynekSurowcow extends rynek {
@@ -14,6 +12,7 @@ public class rynekSurowcow extends rynek {
 
     public rynekSurowcow(String nazwa){
         Random generator = new Random();
+        setNazwa(nazwa);
         defaultRynekSurowcowConstructor();
     }
 

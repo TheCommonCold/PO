@@ -1,9 +1,16 @@
+package życie;
+
 import java.io.IOException;
 
-import spolka.spolka;
 import GUI.aktywaController;
+import GUI.aktywaEdytorController;
+import GUI.mainGUIController;
+import Nazwy.LosoweNazwy;
+import javafx.stage.Modality;
+import spolka.spolka;
 import aktywa.cenyWalut;
 import aktywa.waluta;
+import aktywa.aktywa;
 import kupujacy.inwestor;
 import portfel.stackAkcji;
 import portfel.stackSurowcow;
@@ -21,7 +28,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.Scanner;
 import portfel.zlecenie;
-import życie.DaneRynku;
 
 
 public class Main extends Application {
@@ -34,72 +40,21 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
-        daneRynku.addRynkiWalutData(new rynekWalut("Forex"));
-        daneRynku.addRynkiSurowiecData(new rynekSurowcow("Rynek1"));
-        rynekWalut rynek = new rynekWalut();
-        for(rynekWalut currentRynek:daneRynku.getRynkiWalutData())rynek=currentRynek;
-        daneRynku.addwalutaData(new waluta(rynek,"Dollar"));
-        daneRynku.addwalutaData(new waluta(rynek,"Pesos"));
-        daneRynku.addwalutaData(new waluta(rynek,"Schmeckle"));
-        rynekSurowcow rynekSurowcow = new rynekSurowcow();
-        for(rynekSurowcow currentRynek:daneRynku.getRynkiSurowcowData())rynekSurowcow=currentRynek;
-        daneRynku.addsurowiecData(new surowiec(rynekSurowcow,daneRynku.getWalutaData(),"memy"));
-        daneRynku.addsurowiecData(new surowiec(rynekSurowcow,daneRynku.getWalutaData(),"Zloto"));
-        daneRynku.addRynkiAkcjiData(new rynekAkcji(daneRynku.getWalutaData(),"Rynek1"));
-        rynekAkcji rynekAkcji=new rynekAkcji(daneRynku.getWalutaData());
-        for(rynekAkcji currentRynek:daneRynku.getRynkiAkcjiData())rynekAkcji=currentRynek;
-        daneRynku.addspolkaData(new spolka(rynekAkcji,daneRynku.getInwestorData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),"Apple"));
-
         debugRynekWalut();
         initGUI();
-        walutaCreator();
-        Scanner input = new Scanner(System.in);
-//
-//        daneRynku.addwalutaData(new waluta("Dollar"));
-//        daneRynku.addwalutaData(new waluta("Pesos"));
-//       // daneRynku.addwalutaData(new waluta("Schmeckle"));
-//
-//        daneRynku.addRynkiAkcjiData(new rynekAkcji(daneRynku.getWalutaData(),"Rynek1"));
-//
-//        daneRynku.addspolkaData(new spolka(daneRynku.getRynkiAkcjiData(),daneRynku.getInwestorData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),"Apple"));
-//
-//        daneRynku.addRynkiWalutData(new rynekWalut(daneRynku.getWalutaData(),"Rynek1"));
-//
-//        //daneRynku.addsurowiecData(new surowiec(daneRynku.getWalutaData(),"zloto"));
-//        //daneRynku.addsurowiecData(new surowiec(daneRynku.getWalutaData(),"srebro"));
-//        daneRynku.addsurowiecData(new surowiec(daneRynku.getWalutaData(),"memy"));
-//
-//        daneRynku.addRynkiSurowiecData(new rynekSurowcow(daneRynku.getSurowiecData(),"Rynek1"));
-//
-//
-//        while(input.nextLine().equals("1")){
-//            daneRynku.setLiczbaAktyw(daneRynku.getWalutaData().size()+daneRynku.getSurowiecData().size()+daneRynku.getSpolkaData().size());
-//            daneRynku.setLiczbaKupujacych(daneRynku.getInwestorData().size());
-//            daneRynku.setLiczbaWalut(daneRynku.getWalutaData().size());
-//            daneRynku.updateRynkiWalutData();
-//            if(daneRynku.getLiczbaAktyw()*daneRynku.getRatioKupujacychDoAktyw()>daneRynku.getLiczbaKupujacych()){
-//                for(int i = daneRynku.getLiczbaKupujacych();i<daneRynku.getLiczbaAktyw()*daneRynku.getRatioKupujacychDoAktyw();i++){
-//                    daneRynku.addinwestorData(new inwestor(daneRynku.getSurowiecData(),daneRynku.getWalutaData()));
-//                }
-//            }
-//            daneRynku.kupowanie();
-//            daneRynku.sprzedawanie();
-//            debugSurowiec();
-//            debugRynekWalut();
-//            debugInwestor();
-//            debugZlecenia();
-//            daneRynku.wykonajOperacjeKupnaSprzedazy();
-//            daneRynku.getZlecenia().resetZlecenia();
-//        }
+        //aktywaController();
+        daneRynku.logicLoop();
     }
 
     public void initGUI(){
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("GUI/GUI.fxml"));
+            loader.setLocation(mainGUIController.class.getResource("GUI.fxml"));
             GUI = (BorderPane) loader.load();
             Scene scene = new Scene(GUI);
-
+            mainGUIController cont = loader.getController();
+            cont.setDaneRynku(this.daneRynku,this);
+            cont.aktywaController();
             primaryStage.setTitle("GJEUDA");
 
             primaryStage.setScene(scene);
@@ -210,10 +165,10 @@ public class Main extends Application {
         System.out.print("\n");
     }
 
-    public void walutaCreator() {
+    public void aktywaController() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("GUI/aktywaOverview.fxml"));
+            loader.setLocation(aktywaController.class.getResource("aktywaOverview.fxml"));
             AnchorPane aktywaOverview = (AnchorPane) loader.load();
             aktywaController cont = loader.getController();
             cont.setDaneRynku(this.daneRynku);
@@ -222,6 +177,38 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
+    public boolean showAktywoEdit() {
+        try {
+            System.out.print("test");
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(aktywaEdytorController.class.getResource("aktywoEditDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Aktywo");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Set the person into the controller.
+            aktywaEdytorController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setDaneRynku(daneRynku);
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isOkClicked();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Main getMain(){return this;}
 
     public static void main(String[] args) {
         launch(args);

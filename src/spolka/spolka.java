@@ -1,8 +1,8 @@
 package spolka;
+import Nazwy.LosoweNazwy;
 import aktywa.surowiec;
 import aktywa.waluta;
 import aktywa.akcje;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kupujacy.inwestor;
 import portfel.stackAkcji;
@@ -34,20 +34,20 @@ public class spolka {
         this.akcja = akcja;
     }
 
-    public spolka(rynekAkcji rynek, ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData, ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
+    public spolka(rynekAkcji rynek, ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData, ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw, LosoweNazwy nazwy){
         Random generator = new Random();
         name=Integer.toString(generator.nextInt());
-        defaultSpolkaConstructor(rynek,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
+        defaultSpolkaConstructor(rynek,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw,nazwy);
     }
 
-    public spolka(rynekAkcji rynek,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,String nazwa){
+    public spolka(rynekAkcji rynek,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,String nazwa,LosoweNazwy nazwy){
         this.name=nazwa;
-        defaultSpolkaConstructor(rynek,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw);
+        defaultSpolkaConstructor(rynek,inwestorData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw,nazwy);
     }
 
-    public void defaultSpolkaConstructor(rynekAkcji rynek,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw){
+    public void defaultSpolkaConstructor(rynekAkcji rynek,ObservableList<inwestor> inwestorData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,LosoweNazwy nazwy){
         for(int i =0;i<ratioKupujacychDoAktyw;i++){
-            inwestorData.add(new inwestor(surowiecData,walutaData));
+            inwestorData.add(new inwestor(surowiecData,walutaData,nazwy));
         }
         Random generator = new Random();
         akcja=new akcje(rynek,this);

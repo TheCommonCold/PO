@@ -1,17 +1,20 @@
 package portfel;
 
 import aktywa.aktywa;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 import java.util.*;
 public class portfel {
-    private Set<stackAkcji> akcje;
-    private Set<stackWalut> waluty;
-    private Set<stackSurowcow> surowce;
+    private ObservableList<stackAkcji> akcje;
+    private ObservableList<stackWalut> waluty;
+    private ObservableList<stackSurowcow> surowce;
 
     public portfel(){
-        akcje = new HashSet<>();
-        waluty = new HashSet<>();
-        surowce = new HashSet<>();
+        akcje = FXCollections.observableArrayList();
+        waluty = FXCollections.observableArrayList();
+        surowce = FXCollections.observableArrayList();
     }
 
     public stackWalut getStackWaluty(aktywa waluta){
@@ -52,27 +55,27 @@ public class portfel {
         this.waluty.add(waluta);
     }
 
-    public Set<stackAkcji> getAkcje() {
+    public ObservableList<stackAkcji> getAkcje() {
         return akcje;
     }
 
-    public void setAkcje(Set<stackAkcji> akcje) {
+    public void setAkcje(ObservableList<stackAkcji> akcje) {
         this.akcje = akcje;
     }
 
-    public Set<stackWalut> getWaluty() {
+    public ObservableList<stackWalut> getWaluty() {
         return waluty;
     }
 
-    public void setWaluty(Set<stackWalut> waluty) {
+    public void setWaluty(ObservableList<stackWalut> waluty) {
         this.waluty = waluty;
     }
 
-    public Set<stackSurowcow> getSurowce() {
+    public ObservableList<stackSurowcow> getSurowce() {
         return surowce;
     }
 
-    public void setSurowce(Set<stackSurowcow> surowce) {
+    public void setSurowce(ObservableList<stackSurowcow> surowce) {
         this.surowce = surowce;
     }
 }
