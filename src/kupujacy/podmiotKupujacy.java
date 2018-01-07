@@ -1,28 +1,25 @@
 package kupujacy;
-import aktywa.surowiec;
-import aktywa.akcje;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
-import rynek.rynekWalut;
-import rynek.rynekAkcji;
-import portfel.portfel;
-import portfel.stackWalut;
-import portfel.stackSurowcow;
-import portfel.stackAkcji;
-import portfel.zlecenie;
-import portfel.zleceniaKupnaSprzedazy;
-import aktywa.waluta;
-import rynek.rynekSurowcow;
 
-import java.util.List;
+import aktywa.Akcje;
+import aktywa.Surowiec;
+import aktywa.Waluta;
+import javafx.beans.property.SimpleStringProperty;
+import portfel.*;
+import rynek.RynekAkcji;
+import rynek.RynekSurowcow;
+import rynek.RynekWalut;
+import życie.DaneRynku;
+
+import java.io.Serializable;
 import java.util.Random;
 
-public class podmiotKupujacy extends Thread {
+public abstract class PodmiotKupujacy extends Thread implements Serializable {
     private String imie;
     private String nazwisko;
-    private portfel assets;
+    private Portfel assets;
     private float agresja;
     private String typ;
+    private transient DaneRynku daneRynku;
 
 
     public float getAgresja() {
@@ -49,62 +46,63 @@ public class podmiotKupujacy extends Thread {
         this.nazwisko = nazwisko;
     }
 
-    public portfel getAssets() {
+    public Portfel getAssets() {
         return assets;
     }
 
-    public void setAssets(portfel assets) {
+    public void setAssets(Portfel assets) {
         this.assets = assets;
     }
 
-    public void defaultPodmiotKupujacyConstructor(ObservableList<surowiec> surowiecData, ObservableList<waluta> walutaData,String typ) {
-        this.typ=typ;
+    public void defaultPodmiotKupujacyConstructor(DaneRynku daneRynku, String typ) {
+        this.daneRynku = daneRynku;
+        this.typ = typ;
         Random generator = new Random();
-        setAgresja((generator.nextFloat()/4)+(1/4));
-        setAssets(new portfel());
-        for(surowiec currentSurowiec:surowiecData){
-            if(generator.nextFloat()>0.5){
-                getAssets().addNowySurowiec(new stackSurowcow(currentSurowiec,generator.nextFloat()+generator.nextInt(10000)));
+        setAgresja((generator.nextFloat() / 4) + (1 / 4));
+        setAssets(new Portfel());
+        for (Surowiec currentSurowiec : daneRynku.getSurowiecData()) {
+            if (generator.nextFloat() > 0.3) {
+                getAssets().addNowySurowiec(new StackSurowcow(currentSurowiec, generator.nextFloat() + generator.nextInt(10000)));
             }
         }
-        for(waluta currentWaluta:walutaData){
-            if(generator.nextFloat()>0.5){
-                getAssets().addNowaWaluta(new stackWalut(currentWaluta,generator.nextFloat()+generator.nextInt(100000)));
+        for (Waluta currentWaluta : daneRynku.getWalutaData()) {
+            if (generator.nextFloat() > 0.3) {
+                getAssets().addNowaWaluta(new StackWalut(currentWaluta, generator.nextFloat() + generator.nextInt(100000)));
             }
         }
     }
 
-    public void zlecKupno(zleceniaKupnaSprzedazy zleceniaData,List<rynekWalut> rynkiWalut, List<rynekSurowcow>rynkiSurowcow,List<rynekAkcji> rynkiAkcjiData){
+    public void zlecKupno() {
         Random generator = new Random();
-        if(assets.getWaluty().size()>0){
-            for(rynekWalut currentRynek:rynkiWalut){
-                for(waluta currentWaluta:currentRynek.getListaWalut()){
-                        for(stackWalut currentStackWalut:assets.getWaluty()){
-                            if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>2 && !currentWaluta.equals(currentStackWalut.getWaluta()) && currentRynek.getListaWalut().contains(currentStackWalut.getWaluta())){
-                                zleceniaData.addZlecenieKupna(new zlecenie(this,currentWaluta,currentStackWalut.getWaluta()));
-                                break;
-                            }
-                    }
-                }
-            }
-        }
-        for(rynekSurowcow currentRynek:rynkiSurowcow){
-            for(surowiec currentSurowiec:currentRynek.getListSurowcow()){
-                for(stackWalut currentStackWalut:assets.getWaluty()){
-                    if(currentSurowiec.getWaluta().equals(currentStackWalut.getWaluta())){
-                        if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>currentSurowiec.getWartosc()){
-                            zleceniaData.addZlecenieKupna(new zlecenie(this,currentSurowiec,currentSurowiec.getWaluta()));
+        if (assets.getWaluty().size() > 0) {
+            for (RynekWalut currentRynek : daneRynku.getRynkiWalutData()) {
+                for (Waluta currentWaluta : currentRynek.getListaWalut()) {
+                    for (StackWalut currentStackWalut : assets.getWaluty()) {
+                        if (getAgresja() > generator.nextFloat() && currentStackWalut.getIlosc() > 2 && !currentWaluta.equals(currentStackWalut.getWaluta()) && currentRynek.getListaWalut().contains(currentStackWalut.getWaluta())) {
+                            daneRynku.getZlecenia().addZlecenieKupna(new Zlecenie(this, currentWaluta, currentStackWalut.getWaluta()));
+                            break;
                         }
                     }
                 }
             }
         }
-        for(rynekAkcji currentRynekAkcji:rynkiAkcjiData){
-            for(akcje currentAkcja:currentRynekAkcji.getListAkcji()){
-                for(stackWalut currentStackWalut:assets.getWaluty()){
-                    if(currentRynekAkcji.getWalutaRynku().equals(currentStackWalut.getWaluta())){
-                        if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>currentAkcja.getSpolka().getWartosc()){
-                            zleceniaData.addZlecenieKupna(new zlecenie (this,currentAkcja,currentRynekAkcji.getWalutaRynku()));
+        for (RynekSurowcow currentRynek : daneRynku.getRynkiSurowcowData()) {
+            for (Surowiec currentSurowiec : currentRynek.getListSurowcow()) {
+                for (StackWalut currentStackWalut : assets.getWaluty()) {
+                    if (currentSurowiec.getWaluta().equals(currentStackWalut.getWaluta())) {
+                        if (getAgresja() > generator.nextFloat() && currentStackWalut.getIlosc() > currentSurowiec.getWartosc()) {
+                            daneRynku.getZlecenia().addZlecenieKupna(new Zlecenie(this, currentSurowiec, currentSurowiec.getWaluta()));
+                        }
+                    }
+                }
+            }
+        }
+        for (RynekAkcji currentRynekAkcji : daneRynku.getRynkiAkcjiData()) {
+            for (Akcje currentAkcja : currentRynekAkcji.getListAkcji()) {
+                for (StackWalut currentStackWalut : assets.getWaluty()) {
+                    if (currentRynekAkcji.getWalutaRynku().equals(currentStackWalut.getWaluta())) {
+                        if (getAgresja() > generator.nextFloat() && currentStackWalut.getIlosc() > currentAkcja.getSpolka().getWartosc()) {
+                            daneRynku.getZlecenia().addZlecenieKupna(new Zlecenie(this, currentAkcja, currentRynekAkcji.getWalutaRynku()));
                         }
                     }
                 }
@@ -113,32 +111,32 @@ public class podmiotKupujacy extends Thread {
 
     }
 
-    public void zlecSprzedaz(zleceniaKupnaSprzedazy zleceniaData,List<rynekWalut> rynkiWalut, List<rynekSurowcow>rynkiSurowcow,List<rynekAkcji> rynkiAkcji){
+    public void zlecSprzedaz() {
         Random generator = new Random();
-        for(rynekWalut currentRynek:rynkiWalut){
-                for(stackWalut currentStackWalut:assets.getWaluty()){
-                        for(waluta currentWaluta:currentRynek.getListaWalut()){
-                            if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>2 && !currentStackWalut.getWaluta().equals(currentWaluta)&& currentRynek.getListaWalut().contains(currentStackWalut.getWaluta())){
-                                zleceniaData.addZlecenieSprzedazy(new zlecenie(this,currentWaluta,currentStackWalut.getWaluta()));
-                            }
-                        }
-                }
-        }
-        for(rynekSurowcow currentRynek:rynkiSurowcow){
-                for(stackSurowcow currentStackSurowcow:assets.getSurowce()){
-                    if(currentStackSurowcow.getIlosc()>0){
-                        if(agresja>generator.nextFloat()){
-                            zleceniaData.addZlecenieSprzedazy(new zlecenie(this,currentStackSurowcow.getSurowiec().getWaluta(),currentStackSurowcow.getSurowiec()));
-                        }
+        for (RynekWalut currentRynek : daneRynku.getRynkiWalutData()) {
+            for (StackWalut currentStackWalut : assets.getWaluty()) {
+                for (Waluta currentWaluta : currentRynek.getListaWalut()) {
+                    if (getAgresja() > generator.nextFloat() && currentStackWalut.getIlosc() > 2 && !currentStackWalut.getWaluta().equals(currentWaluta) && currentRynek.getListaWalut().contains(currentStackWalut.getWaluta())) {
+                        daneRynku.getZlecenia().addZlecenieSprzedazy(new Zlecenie(this, currentWaluta, currentStackWalut.getWaluta()));
                     }
                 }
+            }
         }
-        for(rynekAkcji currentRynekAkcji:rynkiAkcji){
-            for(akcje currentAkcja:currentRynekAkcji.getListAkcji()){
-                for(stackAkcji currentStackAkcji:assets.getAkcje()){
-                    if(currentStackAkcji.getIlosc()>0 && currentAkcja.equals(currentStackAkcji.getAkcja())){
-                        if(agresja>generator.nextFloat()){
-                            zleceniaData.addZlecenieSprzedazy((new zlecenie(this,currentRynekAkcji.getWalutaRynku(),currentStackAkcji.getAkcja())));
+        for (RynekSurowcow currentRynek : daneRynku.getRynkiSurowcowData()) {
+            for (StackSurowcow currentStackSurowcow : assets.getSurowce()) {
+                if (currentStackSurowcow.getIlosc() > 0) {
+                    if (getAgresja() > generator.nextFloat()) {
+                        daneRynku.getZlecenia().addZlecenieSprzedazy(new Zlecenie(this, currentStackSurowcow.getSurowiec().getWaluta(), currentStackSurowcow.getSurowiec()));
+                    }
+                }
+            }
+        }
+        for (RynekAkcji currentRynekAkcji : daneRynku.getRynkiAkcjiData()) {
+            for (Akcje currentAkcja : currentRynekAkcji.getListAkcji()) {
+                for (StackAkcji currentStackAkcji : assets.getAkcje()) {
+                    if (currentStackAkcji.getIlosc() > 0 && currentAkcja.equals(currentStackAkcji.getAkcja())) {
+                        if (getAgresja() > generator.nextFloat()) {
+                            daneRynku.getZlecenia().addZlecenieSprzedazy((new Zlecenie(this, currentRynekAkcji.getWalutaRynku(), currentStackAkcji.getAkcja())));
                         }
                     }
                 }
@@ -146,14 +144,40 @@ public class podmiotKupujacy extends Thread {
         }
     }
 
-    public SimpleStringProperty getImieProperty(){
+    public SimpleStringProperty getImieProperty() {
         return new SimpleStringProperty(imie);
     }
-    public SimpleStringProperty getTypProperty(){
+
+    public SimpleStringProperty getTypProperty() {
         return new SimpleStringProperty(typ);
     }
 
-    public SimpleStringProperty getNazwiskoProperty(){
+    public SimpleStringProperty getNazwiskoProperty() {
         return new SimpleStringProperty(nazwisko);
+    }
+
+
+    public void run() {
+        Random generator = new Random();
+        while (1 > 0) {
+            zlecKupno();
+            zlecSprzedaz();
+            synchronized (daneRynku.getMonitor()) {
+                try {
+                    daneRynku.getMonitor().wait();
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+    }
+
+    public DaneRynku getDaneRynku() {
+        return daneRynku;
+    }
+
+    public void setDaneRynku(DaneRynku daneRynku) {
+        this.daneRynku = daneRynku;
     }
 }

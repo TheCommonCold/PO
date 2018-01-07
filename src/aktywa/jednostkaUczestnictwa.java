@@ -1,39 +1,40 @@
 package aktywa;
 
-import kupujacy.funduszInwestycyjny;
+import kupujacy.FunduszInwestycyjny;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-public class jednostkaUczestnictwa {
-    private funduszInwestycyjny funduszInwestycyjny;
-    private waluta walutaJednostek;
+public class JednostkaUczestnictwa implements Serializable {
+    private FunduszInwestycyjny FunduszInwestycyjny;
+    private Waluta walutaJednostek;
     private float wartoscJednostki;
 
-    public jednostkaUczestnictwa(List<waluta> walutaList,funduszInwestycyjny funduszInwestycyjny){
+    public JednostkaUczestnictwa(List<Waluta> walutaList, FunduszInwestycyjny FunduszInwestycyjny) {
         Random generator = new Random();
-        this.funduszInwestycyjny=funduszInwestycyjny;
+        this.FunduszInwestycyjny = FunduszInwestycyjny;
         int ktorawaluta = generator.nextInt(walutaList.size());
-        int i=0;
-        for(waluta currentWaluta:walutaList){
-            if(i==ktorawaluta)walutaJednostek=currentWaluta;
+        int i = 0;
+        for (Waluta currentWaluta : walutaList) {
+            if (i == ktorawaluta) walutaJednostek = currentWaluta;
         }
-        wartoscJednostki=generator.nextInt(300)+generator.nextFloat();
+        wartoscJednostki = generator.nextInt(300) + generator.nextFloat();
     }
 
-    public kupujacy.funduszInwestycyjny getFunduszInwestycyjny() {
-        return funduszInwestycyjny;
+    public FunduszInwestycyjny getFunduszInwestycyjny() {
+        return FunduszInwestycyjny;
     }
 
-    public void setFunduszInwestycyjny(kupujacy.funduszInwestycyjny funduszInwestycyjny) {
-        this.funduszInwestycyjny = funduszInwestycyjny;
+    public void setFunduszInwestycyjny(FunduszInwestycyjny FunduszInwestycyjny) {
+        this.FunduszInwestycyjny = FunduszInwestycyjny;
     }
 
-    public waluta getWalutaJednostek() {
+    public Waluta getWalutaJednostek() {
         return walutaJednostek;
     }
 
-    public void setWalutaJednostek(waluta walutaJednostek) {
+    public void setWalutaJednostek(Waluta walutaJednostek) {
         this.walutaJednostek = walutaJednostek;
     }
 

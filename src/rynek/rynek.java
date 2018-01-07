@@ -2,7 +2,10 @@ package rynek;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class rynek {
+import java.io.Serializable;
+
+public abstract class Rynek implements Serializable {
+    public String typRynku;
     private String nazwa;
     private float marza;
 
@@ -21,7 +24,6 @@ public class rynek {
     public void setMarza(float marza) {
         this.marza = marza;
     }
-    public String typRynku;
 
     public String getTypRynku() {
         return typRynku;
@@ -31,6 +33,11 @@ public class rynek {
         this.typRynku = typRynku;
     }
 
-    public SimpleStringProperty getTypRynkuPropery(){return new SimpleStringProperty(typRynku);}
-    public SimpleStringProperty getNazwaProperty(){return new SimpleStringProperty(nazwa);}
+    public SimpleStringProperty getTypRynkuPropery() {
+        return new SimpleStringProperty(typRynku);
+    }
+
+    public SimpleStringProperty getNazwaProperty() {
+        return new SimpleStringProperty(nazwa);
+    }
 }

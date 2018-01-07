@@ -1,18 +1,24 @@
 package aktywa;
-import rynek.rynek;
-import javafx.beans.property.SimpleStringProperty;
 
-public abstract class aktywa {
+import javafx.beans.property.SimpleStringProperty;
+import rynek.Rynek;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Aktywa implements Serializable {
     private String nazwa;
 
-    private rynek rynek;
+    private transient Rynek Rynek;
+    private List<Float> listaWartosci = new ArrayList<>();
 
-    public rynek getRynek() {
-        return rynek;
+    public Rynek getRynek() {
+        return Rynek;
     }
 
-    public void setRynek(rynek rynek) {
-        this.rynek = rynek;
+    public void setRynek(Rynek Rynek) {
+        this.Rynek = Rynek;
     }
 
     public String getNazwa() {
@@ -23,11 +29,23 @@ public abstract class aktywa {
         this.nazwa = nazwa;
     }
 
-    public SimpleStringProperty getNazwaProperty(){
+    public SimpleStringProperty getNazwaProperty() {
         return new SimpleStringProperty(nazwa);
     }
 
-    public SimpleStringProperty getRynekProperty(){
-        return new SimpleStringProperty(rynek.getNazwa());
+    public SimpleStringProperty getRynekProperty() {
+        return new SimpleStringProperty(Rynek.getNazwa());
+    }
+
+    public void zapiszWartosc(float wartosc) {
+        listaWartosci.add(wartosc);
+    }
+
+    public List<Float> getListaWartosci() {
+        return listaWartosci;
+    }
+
+    public void setListaWartosci(List<Float> listaWartosci) {
+        this.listaWartosci = listaWartosci;
     }
 }

@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import życie.DaneRynku;
 import życie.Main;
 
@@ -12,17 +11,19 @@ import java.io.IOException;
 
 //import życie.Main;
 
-public class mainGUIController {
+public class MainGUIController {
 
+    AktywaController aktywaController;
+    InwestorController inwestorController;
+    RynkiController rynkiController;
+    DaneRynku daneRynku;
+    Main main;
     @FXML
-    private AnchorPane aktywa;
+    private AnchorPane Aktywa;
     @FXML
     private AnchorPane inwestorzy;
     @FXML
     private AnchorPane rynki;
-
-    DaneRynku daneRynku;
-    Main main;
     private boolean okClicked = false;
     //życie.Main main;
 
@@ -31,40 +32,54 @@ public class mainGUIController {
     }
 
 
+    public void refresh() {
+        aktywaController.refresh();
+        inwestorController.refresh();
+        rynkiController.refresh();
+    }
+
     @FXML
     private void handleNewAktywo() {
         main.showAktywoEdit();
     }
 
-
-    public void setDaneRynku(DaneRynku daneRynku,Main main) {
-        this.daneRynku = daneRynku;
-        this.main=main;
+    @FXML
+    private void handleSave() {
+        daneRynku.save();
     }
 
-    public void aktywaController(){
+    @FXML
+    private void handleLoad() {
+        daneRynku.load();
+    }
+
+    public void setDaneRynku(DaneRynku daneRynku, Main main) {
+        this.daneRynku = daneRynku;
+        this.main = main;
+    }
+
+    public void aktywaController() {
 
         FXMLLoader loaderAktywa = new FXMLLoader();
         FXMLLoader loaderInwestor = new FXMLLoader();
         FXMLLoader loaderRynki = new FXMLLoader();
-        loaderAktywa.setLocation(mainGUIController.class.getResource("aktywaOverview.fxml"));
-        loaderInwestor.setLocation(mainGUIController.class.getResource("inwestorOverview.fxml"));
-        loaderRynki.setLocation(mainGUIController.class.getResource("rynkiOverview.fxml"));
+        loaderAktywa.setLocation(MainGUIController.class.getResource("aktywaOverview.fxml"));
+        loaderInwestor.setLocation(MainGUIController.class.getResource("inwestorOverview.fxml"));
+        loaderRynki.setLocation(MainGUIController.class.getResource("rynkiOverview.fxml"));
         try {
-            aktywa.getChildren().setAll((Node) loaderAktywa.load());
+            Aktywa.getChildren().setAll((Node) loaderAktywa.load());
             inwestorzy.getChildren().setAll((Node) loaderInwestor.load());
             rynki.getChildren().setAll((Node) loaderRynki.load());
 
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Nie udało się załadować zawartści zakładek");
         }
-        aktywaController cont1 = loaderAktywa.getController();
-        InwestorController cont2 = loaderInwestor.getController();
-        RynkiController cont3 = loaderRynki.getController();
-        cont1.setDaneRynku(this.daneRynku);
-        cont2.setDaneRynku(this.daneRynku);
-        cont3.setDaneRynku(this.daneRynku);
+        aktywaController = loaderAktywa.getController();
+        inwestorController = loaderInwestor.getController();
+        rynkiController = loaderRynki.getController();
+        aktywaController.setDaneRynku(this.daneRynku);
+        inwestorController.setDaneRynku(this.daneRynku);
+        rynkiController.setDaneRynku(this.daneRynku);
     }
 
 }

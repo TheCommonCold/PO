@@ -1,30 +1,28 @@
 package kupujacy;
 
 import Nazwy.LosoweNazwy;
-import aktywa.jednostkaUczestnictwa;
-import aktywa.surowiec;
-import aktywa.waluta;
+import aktywa.JednostkaUczestnictwa;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
+import życie.DaneRynku;
 
-public class funduszInwestycyjny extends podmiotKupujacy {
+public class FunduszInwestycyjny extends PodmiotKupujacy {
     private String nazwa;
-    private jednostkaUczestnictwa jednostkaUczestnictwa;
+    private JednostkaUczestnictwa JednostkaUczestnictwa;
 
-    public funduszInwestycyjny(ObservableList<surowiec> surowiecData, ObservableList<waluta> walutaData, LosoweNazwy nazwy){
+    public FunduszInwestycyjny(DaneRynku daneRynku, LosoweNazwy nazwy) {
         setImie(nazwy.getImieInwestora());
         setNazwisko(nazwy.getNazwiskoInwestora());
         setNazwa(nazwy.getNazweFunduszu());
-        jednostkaUczestnictwa=new jednostkaUczestnictwa(walutaData,this);
-        defaultPodmiotKupujacyConstructor(surowiecData,walutaData,"Fundusz");
+        JednostkaUczestnictwa = new JednostkaUczestnictwa(daneRynku.getWalutaData(), this);
+        defaultPodmiotKupujacyConstructor(daneRynku, "Fundusz");
     }
 
-    public funduszInwestycyjny(ObservableList<surowiec> surowiecData,ObservableList<waluta> walutaData,String imie,String nazwisko,String nazwa){
+    public FunduszInwestycyjny(DaneRynku daneRynku, String imie, String nazwisko, String nazwa) {
         setImie(imie);
         setNazwisko(nazwisko);
         setNazwa(nazwa);
-        jednostkaUczestnictwa=new jednostkaUczestnictwa(walutaData,this);
-        defaultPodmiotKupujacyConstructor(surowiecData,walutaData,"Fundusz");
+        JednostkaUczestnictwa = new JednostkaUczestnictwa(daneRynku.getWalutaData(), this);
+        defaultPodmiotKupujacyConstructor(daneRynku, "Fundusz");
     }
 
     public String getNazwa() {
@@ -35,12 +33,12 @@ public class funduszInwestycyjny extends podmiotKupujacy {
         this.nazwa = nazwa;
     }
 
-    public aktywa.jednostkaUczestnictwa getJednostkaUczestnictwa() {
-        return jednostkaUczestnictwa;
+    public JednostkaUczestnictwa getJednostkaUczestnictwa() {
+        return JednostkaUczestnictwa;
     }
 
-    public void setJednostkaUczestnictwa(aktywa.jednostkaUczestnictwa jednostkaUczestnictwa) {
-        this.jednostkaUczestnictwa = jednostkaUczestnictwa;
+    public void setJednostkaUczestnictwa(JednostkaUczestnictwa JednostkaUczestnictwa) {
+        this.JednostkaUczestnictwa = JednostkaUczestnictwa;
     }
 
     public SimpleStringProperty getNazwaProperty() {

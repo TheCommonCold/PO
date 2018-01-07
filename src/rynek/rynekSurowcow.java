@@ -1,38 +1,42 @@
 package rynek;
-import aktywa.surowiec;
 
-import java.util.*;
-public class rynekSurowcow extends rynek {
+import aktywa.Surowiec;
 
-    public rynekSurowcow(){
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
+public class RynekSurowcow extends Rynek {
+
+    private Set<Surowiec> listSurowcow = new HashSet<>();
+
+    public RynekSurowcow() {
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
         defaultRynekSurowcowConstructor();
     }
 
-    public rynekSurowcow(String nazwa){
+    public RynekSurowcow(String nazwa) {
         Random generator = new Random();
         setNazwa(nazwa);
         defaultRynekSurowcowConstructor();
     }
 
-    public void defaultRynekSurowcowConstructor(){
+    public void defaultRynekSurowcowConstructor() {
         setTypRynku("Surowce");
         Random generator = new Random();
-        setMarza(generator.nextFloat()/4);
+        setMarza(generator.nextFloat() / 4);
     }
 
-    public void addNewSurowiec(surowiec surowiec){
-        listSurowcow.add(surowiec);
+    public void addNewSurowiec(Surowiec Surowiec) {
+        listSurowcow.add(Surowiec);
     }
 
-    public Set<surowiec> getListSurowcow() {
+    public Set<Surowiec> getListSurowcow() {
         return listSurowcow;
     }
 
-    public void setListSurowcow(Set<surowiec> listSurowcow) {
+    public void setListSurowcow(Set<Surowiec> listSurowcow) {
         this.listSurowcow = listSurowcow;
     }
-
-    private Set<surowiec> listSurowcow=new HashSet<>();
 }

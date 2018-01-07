@@ -2,23 +2,54 @@ package aktywa;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class cenaWaluty {
-    private waluta waluta;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CenaWaluty implements Serializable {
+    private Waluta Waluta;
     private float cenaKupna;
     private float cenaSprzedazy;
 
-    cenaWaluty(waluta waluta,float cenaKupna, float cenaSprzedazy){
-        this.waluta=waluta;
-        this.cenaKupna=cenaKupna;
-        this.cenaSprzedazy=cenaSprzedazy;
+    private List<Float> listaWartosciKupna = new ArrayList<>();
+    private List<Float> listaWartosciSprzedazy = new ArrayList<>();
+
+    CenaWaluty(Waluta Waluta, float cenaKupna, float cenaSprzedazy) {
+        this.Waluta = Waluta;
+        this.cenaKupna = cenaKupna;
+        this.cenaSprzedazy = cenaSprzedazy;
     }
 
-    public waluta getWaluta() {
-        return waluta;
+    public void zapiszWartoscKupna() {
+        listaWartosciKupna.add(cenaKupna);
     }
 
-    public void setWaluta(waluta waluta) {
-        this.waluta = waluta;
+    public List<Float> getListaWartosciKupna() {
+        return listaWartosciKupna;
+    }
+
+    public void setListaWartosciKupna(List<Float> listaWartosciKupna) {
+        this.listaWartosciKupna = listaWartosciKupna;
+    }
+
+    public void zapiszWartoscSprzedazy() {
+        listaWartosciSprzedazy.add(cenaSprzedazy);
+    }
+
+    public List<Float> getListaWartosciSprzedazy() {
+        return listaWartosciSprzedazy;
+    }
+
+    public void setListaWartosciSprzedazy(List<Float> listaWartosciSprzedazy) {
+        this.listaWartosciSprzedazy = listaWartosciSprzedazy;
+    }
+
+    public Waluta getWaluta() {
+        return Waluta;
+    }
+
+    public void setWaluta(Waluta Waluta) {
+        this.Waluta = Waluta;
     }
 
     public float getCenaKupna() {
@@ -37,10 +68,11 @@ public class cenaWaluty {
         this.cenaSprzedazy = cenaSprzedazy;
     }
 
-    public SimpleStringProperty getCenaKupnaProperty(){
+    public SimpleStringProperty getCenaKupnaProperty() {
         return new SimpleStringProperty(Float.toString(cenaKupna));
     }
-    public SimpleStringProperty getCenaSprzedazyProperty(){
+
+    public SimpleStringProperty getCenaSprzedazyProperty() {
         return new SimpleStringProperty(Float.toString(cenaSprzedazy));
     }
 

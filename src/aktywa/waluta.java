@@ -1,36 +1,40 @@
 package aktywa;
 
-import rynek.rynekWalut;
+import Nazwy.LosoweNazwy;
+import rynek.RynekWalut;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
-public class waluta extends aktywa {
+public class Waluta extends Aktywa {
 
-    public waluta(rynekWalut rynek){
+    private Set<String> listaKrajow = new HashSet<>();
+
+    public Waluta(RynekWalut rynek, LosoweNazwy nazwy) {
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
-        defaultWalutaConstructor(rynek);
+        defaultWalutaConstructor(rynek, nazwy);
     }
 
-    public waluta(rynekWalut rynek,String nazwa){
+    public Waluta(RynekWalut rynek, LosoweNazwy nazwy, String nazwa) {
         setNazwa(nazwa);
-        defaultWalutaConstructor(rynek);
+        defaultWalutaConstructor(rynek, nazwy);
     }
 
-    public void defaultWalutaConstructor(rynekWalut rynek){
+    public void defaultWalutaConstructor(RynekWalut rynek, LosoweNazwy nazwa) {
         Random generator = new Random();
-        for(int i=0;i<generator.nextInt(100);i++){
-            listaKrajow.add(Integer.toString(generator.nextInt()));
+        for (int i = 0; i < generator.nextInt(3) + 1; i++) {
+            listaKrajow.add(nazwa.getNazweKrajow());
         }
         setRynek(rynek);
         rynek.addNewWaluta(this);
     }
 
-
-    public String displayListaKrajow(){
-        String listaKrajow= new String();
-        for(String kraj:this.listaKrajow){
-            listaKrajow=listaKrajow + " " +kraj;
+    public String displayListaKrajow() {
+        String listaKrajow = new String();
+        for (String kraj : this.listaKrajow) {
+            listaKrajow = listaKrajow + " " + kraj;
         }
         return listaKrajow;
     }
@@ -42,6 +46,4 @@ public class waluta extends aktywa {
     public void setListaKrajow(Set<String> listaKrajow) {
         this.listaKrajow = listaKrajow;
     }
-
-    private Set<String> listaKrajow = new HashSet<>();
 }

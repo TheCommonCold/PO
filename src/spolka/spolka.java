@@ -1,121 +1,145 @@
 package spolka;
+
 import Nazwy.LosoweNazwy;
-import aktywa.surowiec;
-import aktywa.waluta;
-import aktywa.akcje;
+import aktywa.Akcje;
 import javafx.collections.ObservableList;
-import kupujacy.inwestor;
-import kupujacy.podmiotKupujacy;
-import portfel.stackAkcji;
-import portfel.stackWalut;
-import rynek.rynekAkcji;
+import kupujacy.Inwestor;
+import kupujacy.PodmiotKupujacy;
+import portfel.StackAkcji;
+import portfel.StackWalut;
+import rynek.RynekAkcji;
+import życie.DaneRynku;
 
 import java.util.Date;
 import java.util.Random;
 
-public class spolka extends Thread{
+public class Spolka extends Thread {
     private String name;
     private Date dataPierwszejWyceny;
     private float wartosc;
     private float kursOtwarcia;
     private float minimalnyKurs;
     private float maksymalnyKurs;
-    private akcje akcja;
+    private Akcje akcja;
     private int liczbaAkcji;
     private double zysk;
     private double przychod;
     private float kapitalWlasny;
     private float kapitalZakladowy;
     private int wolumen;
+    private float wartoscPoczatkowa;
+    private boolean chceWypuscic = false;
+    private float obroty;
 
-    public akcje getAkcja() {
+    public Spolka(RynekAkcji rynek, DaneRynku daneRynku, int ratioKupujacychDoAktyw, LosoweNazwy nazwy) {
+        Random generator = new Random();
+        name = Integer.toString(generator.nextInt());
+        defaultSpolkaConstructor(rynek, daneRynku, ratioKupujacychDoAktyw, nazwy);
+    }
+
+    public Spolka(RynekAkcji rynek, DaneRynku daneRynku, int ratioKupujacychDoAktyw, String nazwa, LosoweNazwy nazwy) {
+        this.name = nazwa;
+        defaultSpolkaConstructor(rynek, daneRynku, ratioKupujacychDoAktyw, nazwy);
+    }
+
+    public Akcje getAkcja() {
         return akcja;
     }
 
-    public void setAkcja(akcje akcja) {
+    public void setAkcja(Akcje akcja) {
         this.akcja = akcja;
     }
 
-    public spolka(rynekAkcji rynek, ObservableList<inwestor> inwestorData,ObservableList<podmiotKupujacy>podmiotKupujacyData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData, ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw, LosoweNazwy nazwy){
-        Random generator = new Random();
-        name=Integer.toString(generator.nextInt());
-        defaultSpolkaConstructor(rynek,inwestorData,podmiotKupujacyData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw,nazwy);
-    }
-
-    public spolka(rynekAkcji rynek,ObservableList<inwestor> inwestorData,ObservableList<podmiotKupujacy>podmiotKupujacyData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,String nazwa,LosoweNazwy nazwy){
-        this.name=nazwa;
-        defaultSpolkaConstructor(rynek,inwestorData,podmiotKupujacyData,walutaData,surowiecData,akcjeData,ratioKupujacychDoAktyw,nazwy);
-    }
-
-    public void defaultSpolkaConstructor(rynekAkcji rynek,ObservableList<inwestor> inwestorData,ObservableList<podmiotKupujacy>podmiotKupujacyData, ObservableList<waluta> walutaData, ObservableList<surowiec> surowiecData,ObservableList<akcje>akcjeData, int ratioKupujacychDoAktyw,LosoweNazwy nazwy){
-        for(int i =0;i<ratioKupujacychDoAktyw;i++){
-            inwestorData.add(new inwestor(surowiecData,walutaData,nazwy));
+    public void defaultSpolkaConstructor(RynekAkcji rynek, DaneRynku daneRynku, int ratioKupujacychDoAktyw, LosoweNazwy nazwy) {
+        for (int i = 0; i < ratioKupujacychDoAktyw; i++) {
+            daneRynku.getInwestorData().add(new Inwestor(daneRynku, nazwy));
         }
         Random generator = new Random();
-        akcja=new akcje(rynek,this);
+        akcja = new Akcje(rynek, this);
         dataPierwszejWyceny = new Date();
-        kursOtwarcia=generator.nextFloat()+generator.nextInt(500);
-        minimalnyKurs=kursOtwarcia;
-        maksymalnyKurs=kursOtwarcia;
-        wartosc=kursOtwarcia;
-        akcjeData.add(akcja);
-        przychod=generator.nextInt(10000000);
-        zysk=przychod*0.77;
-        liczbaAkcji=0;
-        kapitalWlasny=generator.nextFloat()+generator.nextInt(1000000000);
-        kapitalZakladowy=generator.nextFloat()+generator.nextInt(100000000);
-        obroty=0;
-        for(podmiotKupujacy currentPodmiot:podmiotKupujacyData){
-            int temp=generator.nextInt(100000/podmiotKupujacyData.size());
-            currentPodmiot.getAssets().addNowaAkcja(new stackAkcji(akcja,temp));
-            liczbaAkcji+=temp;
+        kursOtwarcia = generator.nextFloat() + generator.nextInt(500);
+        minimalnyKurs = kursOtwarcia;
+        maksymalnyKurs = kursOtwarcia;
+        wartosc = kursOtwarcia;
+        wartoscPoczatkowa = wartosc;
+        daneRynku.getAkcjeData().add(akcja);
+        przychod = generator.nextInt(10000000);
+        zysk = przychod * 0.77;
+        liczbaAkcji = 0;
+        kapitalWlasny = generator.nextFloat() + generator.nextInt(1000000000);
+        kapitalZakladowy = generator.nextFloat() + generator.nextInt(100000000);
+        obroty = 0;
+        wolumen = 0;
+        for (PodmiotKupujacy currentPodmiot : daneRynku.getPodmiotKupujacyData()) {
+            int temp = generator.nextInt(100000 / daneRynku.getPodmiotKupujacyData().size());
+            currentPodmiot.getAssets().addNowaAkcja(new StackAkcji(akcja, temp));
+            liczbaAkcji += temp;
         }
     }
 
-    public void wykupAkcji(ObservableList<podmiotKupujacy>podmiotKupujacyData,float cenaWykupu){
+    public void wykupAkcji(ObservableList<PodmiotKupujacy> podmiotKupujacyData, float cenaWykupu) {
         Random generator = new Random();
-        int tempLiczbaAkcji= liczbaAkcji;
-        for(podmiotKupujacy currentPodmiot:podmiotKupujacyData){
-            if(currentPodmiot.getAssets().getStackAkcji(akcja)!=null && currentPodmiot.getAssets().getStackAkcji(akcja).getIlosc()>2){
-                int temp=generator.nextInt((int)currentPodmiot.getAssets().getStackAkcji(akcja).getIlosc());
+        int tempLiczbaAkcji = liczbaAkcji;
+        for (PodmiotKupujacy currentPodmiot : podmiotKupujacyData) {
+            if (currentPodmiot.getAssets().getStackAkcji(akcja) != null && currentPodmiot.getAssets().getStackAkcji(akcja).getIlosc() > 2) {
+                int temp = generator.nextInt((int) currentPodmiot.getAssets().getStackAkcji(akcja).getIlosc());
                 currentPodmiot.getAssets().getStackAkcji(akcja).subtractIlosc(temp);
-                if(currentPodmiot.getAssets().getStackWaluty(((rynekAkcji)akcja.getRynek()).getWalutaRynku())!=null){
-                    currentPodmiot.getAssets().getStackWaluty(((rynekAkcji)akcja.getRynek()).getWalutaRynku()).addIlosc(temp*cenaWykupu);
-                }else{
-                    currentPodmiot.getAssets().addNowaWaluta(new stackWalut(((rynekAkcji)akcja.getRynek()).getWalutaRynku(),temp*cenaWykupu));
+                if (currentPodmiot.getAssets().getStackWaluty(((RynekAkcji) akcja.getRynek()).getWalutaRynku()) != null) {
+                    currentPodmiot.getAssets().getStackWaluty(((RynekAkcji) akcja.getRynek()).getWalutaRynku()).addIlosc(temp * cenaWykupu);
+                } else {
+                    currentPodmiot.getAssets().addNowaWaluta(new StackWalut(((RynekAkcji) akcja.getRynek()).getWalutaRynku(), temp * cenaWykupu));
                 }
-                liczbaAkcji-=temp;
+                liczbaAkcji -= temp;
             }
         }
     }
 
-    public void wypuscNoweAkcje(ObservableList<podmiotKupujacy>podmiotKupujacyData){
+    public void wypuscNoweAkcje(ObservableList<PodmiotKupujacy> podmiotKupujacyData) {
         Random generator = new Random();
-        if(generator.nextFloat()<0.08){
-            for(podmiotKupujacy currentPodmiot:podmiotKupujacyData){
-                if(generator.nextFloat()<0.1){
-                    int temp=generator.nextInt(100);
-                    if(currentPodmiot.getAssets().getStackAkcji(akcja)!=null){
+        if (chceWypuscic) {
+            for (PodmiotKupujacy currentPodmiot : podmiotKupujacyData) {
+                if (generator.nextFloat() < 0.1) {
+                    int temp = generator.nextInt(100);
+                    if (currentPodmiot.getAssets().getStackAkcji(akcja) != null) {
                         currentPodmiot.getAssets().getStackAkcji(akcja).addIlosc(temp);
-                    }else{
-                        currentPodmiot.getAssets().addNowaAkcja(new stackAkcji(akcja,temp));
+                    } else {
+                        currentPodmiot.getAssets().addNowaAkcja(new StackAkcji(akcja, temp));
                     }
-                    liczbaAkcji+=temp;
+                    liczbaAkcji += temp;
                 }
             }
+            chceWypuscic = false;
         }
     }
 
-    public void generateZysk(){
+    public void run() {
         Random generator = new Random();
-        przychod=przychod+generator.nextInt(10000)-generator.nextInt(10000);
-        zysk=przychod*0.77;
+        int counter = 0;
+        while (1 > 0) {
+            if (counter == 5) {
+                generateZysk();
+                generateKursOtwarcia();
+            }
+            if (generator.nextFloat() < 0.08) chceWypuscic = true;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            counter++;
+        }
     }
 
-    public void generateKursOtwarcia(){
-        kursOtwarcia=wartosc;
-        if(kursOtwarcia>maksymalnyKurs)maksymalnyKurs=kursOtwarcia;
-        if(kursOtwarcia<minimalnyKurs)minimalnyKurs=kursOtwarcia;
+    public void generateZysk() {
+        Random generator = new Random();
+        przychod = przychod + generator.nextInt(10000) - generator.nextInt(10000);
+        zysk = przychod * 0.77;
+    }
+
+    public void generateKursOtwarcia() {
+        kursOtwarcia = wartosc;
+        if (kursOtwarcia > maksymalnyKurs) maksymalnyKurs = kursOtwarcia;
+        if (kursOtwarcia < minimalnyKurs) minimalnyKurs = kursOtwarcia;
     }
 
     public Date getDataPierwszejWyceny() {
@@ -222,5 +246,19 @@ public class spolka extends Thread{
         this.wartosc = wartosc;
     }
 
-    private float obroty;
+    public float getWartoscPoczatkowa() {
+        return wartoscPoczatkowa;
+    }
+
+    public void setWartoscPoczatkowa(float wartoscPoczatkowa) {
+        this.wartoscPoczatkowa = wartoscPoczatkowa;
+    }
+
+    public void addWolumen(int ilosc) {
+        wolumen += ilosc;
+    }
+
+    public void addObroty(float ilosc) {
+        obroty += ilosc;
+    }
 }

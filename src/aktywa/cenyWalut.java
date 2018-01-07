@@ -3,31 +3,35 @@ package aktywa;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class cenyWalut {
-    private waluta waluta;
-    private ObservableList<cenaWaluty> wartosc = FXCollections.observableArrayList();;
+import java.io.Serializable;
+import java.util.List;
 
-    public cenyWalut(waluta waluta){
-        this.waluta = waluta;
+public class CenyWalut implements Serializable {
+    private Waluta Waluta;
+    private transient ObservableList<CenaWaluty> wartosc = FXCollections.observableArrayList();
+    private List<CenaWaluty> wartoscZapis;
+
+    public CenyWalut(Waluta Waluta) {
+        this.Waluta = Waluta;
     }
 
-    public void addWaluta(waluta waluta,float cenaKupna, float cenaSprzedazy){
-        wartosc.add(new cenaWaluty(waluta,cenaKupna,cenaSprzedazy));
+    public void addWaluta(Waluta Waluta, float cenaKupna, float cenaSprzedazy) {
+        wartosc.add(new CenaWaluty(Waluta, cenaKupna, cenaSprzedazy));
     }
 
-    public waluta getWaluta() {
-        return waluta;
+    public Waluta getWaluta() {
+        return Waluta;
     }
 
-    public void setWaluta(waluta waluta) {
-        this.waluta = waluta;
+    public void setWaluta(Waluta Waluta) {
+        this.Waluta = Waluta;
     }
 
-    public ObservableList<cenaWaluty>  getWartosc() {
+    public ObservableList<CenaWaluty> getWartosc() {
         return wartosc;
     }
 
-    public void setWartosc(ObservableList<cenaWaluty>  wartosc) {
+    public void setWartosc(ObservableList<CenaWaluty> wartosc) {
         this.wartosc = wartosc;
     }
 }

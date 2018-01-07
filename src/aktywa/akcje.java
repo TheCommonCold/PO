@@ -1,22 +1,24 @@
 package aktywa;
-import rynek.rynekAkcji;
-import spolka.spolka;
 
-public class akcje extends aktywa {
-    public spolka getSpolka() {
-        return spolka;
-    }
+import rynek.RynekAkcji;
+import spolka.Spolka;
 
-    public void setSpolka(spolka spolka) {
-        this.spolka = spolka;
-    }
+public class Akcje extends Aktywa {
+    private Spolka Spolka;
 
-    public akcje(rynekAkcji rynek, spolka spolka){
-        this.spolka=spolka;
-        setNazwa(spolka.getNazwa());
+    public Akcje(RynekAkcji rynek, Spolka Spolka) {
+        this.Spolka = Spolka;
+        setNazwa(Spolka.getNazwa());
         setRynek(rynek);
         rynek.addNewAkcja(this);
     }
 
-    private spolka spolka;
+    public Spolka getSpolka() {
+        return Spolka;
+    }
+
+    public void setSpolka(Spolka Spolka) {
+        this.Spolka = Spolka;
+    }
+
 }

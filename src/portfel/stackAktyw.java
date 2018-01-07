@@ -2,7 +2,9 @@ package portfel;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class stackAktyw {
+import java.io.Serializable;
+
+public class StackAktyw implements Serializable {
     private float ilosc;
 
     public float getIlosc() {
@@ -13,13 +15,15 @@ public class stackAktyw {
         this.ilosc = ilosc;
     }
 
-    public void subtractIlosc(float liczba){
-        this.ilosc-=liczba;
+    public void subtractIlosc(float liczba) {
+        this.ilosc -= liczba;
     }
 
-    public void addIlosc(float liczba){
-        this.ilosc+=liczba;
+    public void addIlosc(float liczba) {
+        this.ilosc += liczba;
     }
 
-    public SimpleStringProperty getIloscProperty(){return new SimpleStringProperty(Float.toString(ilosc));}
+    public SimpleStringProperty getIloscProperty() {
+        return new SimpleStringProperty(Float.toString(ilosc));
+    }
 }

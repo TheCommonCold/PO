@@ -1,23 +1,20 @@
 package portfel;
 
-import aktywa.waluta;
-import javafx.beans.property.SimpleStringProperty;
+import aktywa.Waluta;
 
-import java.util.Random;
+public class StackWalut extends StackAktyw {
+    private Waluta Waluta;
 
-public class stackWalut extends stackAktyw{
-    private aktywa.waluta waluta;
-
-    public stackWalut(waluta waluta, float ilosc){
-        this.waluta=waluta;
+    public StackWalut(Waluta Waluta, float ilosc) {
+        this.Waluta = Waluta;
         setIlosc(ilosc);
     }
 
-    public waluta getWaluta() {
-        return waluta;
+    public Waluta getWaluta() {
+        return Waluta;
     }
 
-    public void setWaluta(waluta waluta) {
-        this.waluta = waluta;
+    public void setWaluta(Waluta Waluta) {
+        this.Waluta = Waluta;
     }
 }

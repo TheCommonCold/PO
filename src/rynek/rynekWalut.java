@@ -1,78 +1,85 @@
 package rynek;
 
-import aktywa.cenyWalut;
-import aktywa.waluta;
+import aktywa.CenaWaluty;
+import aktywa.CenyWalut;
+import aktywa.Waluta;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-public class rynekWalut extends rynek {
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
-    public rynekWalut(){
+public class RynekWalut extends Rynek {
+
+    private Set<Waluta> listaWalut = new HashSet<>();
+    private Set<CenyWalut> listaCen = new HashSet<>();
+
+    public RynekWalut() {
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
         defaultRynekWalutConstructor();
     }
 
-    public rynekWalut(String nazwa){
+    public RynekWalut(String nazwa) {
         setNazwa(nazwa);
         defaultRynekWalutConstructor();
     }
 
-    public void defaultRynekWalutConstructor(){
+    public void defaultRynekWalutConstructor() {
         setTypRynku("Waluty");
         Random generator = new Random();
-        setMarza(generator.nextFloat()/4);
+        setMarza(generator.nextFloat() / 4);
     }
 
-    public cenyWalut getCenaWaluty(waluta waluta){
-        for(cenyWalut currentCenyWalut:listaCen){
-            if(currentCenyWalut.getWaluta().equals(waluta)){
+    public CenyWalut getCenaWaluty(Waluta Waluta) {
+        for (CenyWalut currentCenyWalut : listaCen) {
+            if (currentCenyWalut.getWaluta().equals(Waluta)) {
                 return currentCenyWalut;
             }
         }
         return null;
     }
 
-
-    public void addNewWaluta(waluta waluta){
+    public void addNewWaluta(Waluta Waluta) {
         Random generator = new Random();
-        listaWalut.add(waluta);
-        if(getListaCen().size()!=0){
-            cenyWalut addedWaluta = new cenyWalut(waluta);
-            for(cenyWalut currentCenyWalut:listaCen){
-                float a=generator.nextInt(10)+generator.nextFloat();
-                if(generator.nextFloat()<0.5) {
-                    currentCenyWalut.addWaluta(addedWaluta.getWaluta(),a,1/a);
-                    addedWaluta.addWaluta(currentCenyWalut.getWaluta(),1/a,a);
-                }else{
-                    addedWaluta.addWaluta(currentCenyWalut.getWaluta(),a,1/a);
-                    currentCenyWalut.addWaluta(addedWaluta.getWaluta(),1/a,a);
+        listaWalut.add(Waluta);
+        if (getListaCen().size() != 0) {
+            CenyWalut addedWaluta = new CenyWalut(Waluta);
+            for (CenyWalut currentCenyWalut : listaCen) {
+                float a = generator.nextInt(10) + generator.nextFloat();
+                if (generator.nextFloat() < 0.5) {
+                    currentCenyWalut.addWaluta(addedWaluta.getWaluta(), a, 1 / a);
+                    addedWaluta.addWaluta(currentCenyWalut.getWaluta(), 1 / a, a);
+                } else {
+                    addedWaluta.addWaluta(currentCenyWalut.getWaluta(), a, 1 / a);
+                    currentCenyWalut.addWaluta(addedWaluta.getWaluta(), 1 / a, a);
                 }
             }
             listaCen.add(addedWaluta);
-        }
-        else listaCen.add(new cenyWalut(waluta));
+        } else listaCen.add(new CenyWalut(Waluta));
     }
 
-    public Set<waluta> getListaWalut() {
+    public Set<Waluta> getListaWalut() {
         return listaWalut;
     }
 
-    public void setListaWalut(Set<waluta> listaWalut) {
+    public void setListaWalut(Set<Waluta> listaWalut) {
         this.listaWalut = listaWalut;
     }
 
-    private Set<waluta> listaWalut= new HashSet<>();
-
-    private  Set<cenyWalut> listaCen= new HashSet<>();
-
-    public Set<cenyWalut> getListaCen() {
+    public Set<CenyWalut> getListaCen() {
         return listaCen;
     }
 
-    public void setListaCen(Set<cenyWalut> listaCen) {
+    public void setListaCen(Set<CenyWalut> listaCen) {
         this.listaCen = listaCen;
+    }
+
+
+    public void zapiszCeny() {
+        for (CenyWalut currentCenywalut : listaCen) {
+            for (CenaWaluty currentCenaWaluty : currentCenywalut.getWartosc()) {
+                currentCenaWaluty.zapiszWartoscKupna();
+            }
+        }
     }
 }

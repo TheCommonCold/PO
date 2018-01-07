@@ -1,64 +1,58 @@
 package GUI;
 
-import aktywa.aktywa;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import kupujacy.inwestor;
-import kupujacy.podmiotKupujacy;
-import portfel.*;
+import kupujacy.Inwestor;
+import kupujacy.PodmiotKupujacy;
+import portfel.StackAkcji;
+import portfel.StackJednostekUczestnictwa;
+import portfel.StackSurowcow;
+import portfel.StackWalut;
 import życie.DaneRynku;
 
 public class InwestorController {
 
+    DaneRynku daneRynku;
     @FXML
-    private TableView<podmiotKupujacy> PodmiotKupujacyTable;
+    private TableView<PodmiotKupujacy> PodmiotKupujacyTable;
     @FXML
-    private TableView<stackWalut> walutaTable;
+    private TableView<StackWalut> walutaTable;
     @FXML
-    private TableView<stackSurowcow> surowiecTable;
+    private TableView<StackSurowcow> surowiecTable;
     @FXML
-    private TableView<stackAkcji> akcjaTable;
+    private TableView<StackAkcji> akcjaTable;
     @FXML
-    private TableView<stackJednostekUczestnictwa> funduszTable;
-
+    private TableView<StackJednostekUczestnictwa> funduszTable;
     @FXML
-    private TableColumn<podmiotKupujacy, String> imieColumn;
+    private TableColumn<PodmiotKupujacy, String> imieColumn;
     @FXML
-    private TableColumn<podmiotKupujacy, String> nazwiskoColumn;
+    private TableColumn<PodmiotKupujacy, String> nazwiskoColumn;
     @FXML
-    private TableColumn<podmiotKupujacy, String> typColumn;
-
+    private TableColumn<PodmiotKupujacy, String> typColumn;
     @FXML
-    private TableColumn<stackWalut, String> walutaColumn;
+    private TableColumn<StackWalut, String> walutaColumn;
     @FXML
-    private TableColumn<stackSurowcow, String> surowiecColumn;
+    private TableColumn<StackSurowcow, String> surowiecColumn;
     @FXML
-    private TableColumn<stackAkcji, String> akcjaColumn;
+    private TableColumn<StackAkcji, String> akcjaColumn;
     @FXML
-    private TableColumn<stackJednostekUczestnictwa,String>funduszColumn;
-
+    private TableColumn<StackJednostekUczestnictwa, String> funduszColumn;
     @FXML
-    private TableColumn<stackWalut, String> iloscWalutaColumn;
+    private TableColumn<StackWalut, String> iloscWalutaColumn;
     @FXML
-    private TableColumn<stackSurowcow, String> iloscSurowiecColumn;
+    private TableColumn<StackSurowcow, String> iloscSurowiecColumn;
     @FXML
-    private TableColumn<stackAkcji, String> iloscAkcjaColumn;
+    private TableColumn<StackAkcji, String> iloscAkcjaColumn;
     @FXML
-    private TableColumn<stackJednostekUczestnictwa,String> iloscJednostekColumn;
-
-
-
+    private TableColumn<StackJednostekUczestnictwa, String> iloscJednostekColumn;
     @FXML
     private Label imieLabel;
     @FXML
     private Label nazwiskoLabel;
     @FXML
     private Label peselLabel;
-
-    DaneRynku daneRynku;
-
 
     public DaneRynku getDaneRynku() {
         return daneRynku;
@@ -76,26 +70,26 @@ public class InwestorController {
         nazwiskoColumn.setCellValueFactory(cellData -> cellData.getValue().getNazwiskoProperty());
         typColumn.setCellValueFactory(cellData -> cellData.getValue().getTypProperty());
         PodmiotKupujacyTable.getSelectionModel().selectedItemProperty().addListener(
-                ((observable, oldValue, newValue) -> showInwestor(newValue) )
+                ((observable, oldValue, newValue) -> showInwestor(newValue))
         );
     }
 
-    public void showInwestor(podmiotKupujacy podmiotKupujacy){
+    public void showInwestor(PodmiotKupujacy PodmiotKupujacy) {
         hideStuff();
-        imieLabel.setText(podmiotKupujacy.getImie());
-        nazwiskoLabel.setText(podmiotKupujacy.getNazwisko());
-        if(podmiotKupujacy instanceof inwestor){
+        imieLabel.setText(PodmiotKupujacy.getImie());
+        nazwiskoLabel.setText(PodmiotKupujacy.getNazwisko());
+        if (PodmiotKupujacy instanceof Inwestor) {
             peselLabel.setVisible(true);
             funduszTable.setVisible(true);
-            peselLabel.setText(Double.toString(((inwestor) podmiotKupujacy).getPesel()));
-            funduszTable.setItems(podmiotKupujacy.getAssets().getJednostkiUczestnictwa());
+            peselLabel.setText(Double.toString(((Inwestor) PodmiotKupujacy).getPesel()));
+            funduszTable.setItems(PodmiotKupujacy.getAssets().getJednostkiUczestnictwa());
             funduszColumn.setCellValueFactory(cellData -> cellData.getValue().getJednostkaUczestnictwa().getFunduszInwestycyjny().getNazwaProperty());
             iloscJednostekColumn.setCellValueFactory(cellData -> cellData.getValue().getIloscProperty());
         }
-        walutaTable.setItems(podmiotKupujacy.getAssets().getWaluty());
-        surowiecTable.setItems(podmiotKupujacy.getAssets().getSurowce());
-        walutaTable.setItems(podmiotKupujacy.getAssets().getWaluty());
-        akcjaTable.setItems(podmiotKupujacy.getAssets().getAkcje());
+        walutaTable.setItems(PodmiotKupujacy.getAssets().getWaluty());
+        surowiecTable.setItems(PodmiotKupujacy.getAssets().getSurowce());
+        walutaTable.setItems(PodmiotKupujacy.getAssets().getWaluty());
+        akcjaTable.setItems(PodmiotKupujacy.getAssets().getAkcje());
         walutaColumn.setCellValueFactory(cellData -> cellData.getValue().getWaluta().getNazwaProperty());
         surowiecColumn.setCellValueFactory(cellData -> cellData.getValue().getSurowiec().getNazwaProperty());
         akcjaColumn.setCellValueFactory(cellData -> cellData.getValue().getAkcja().getNazwaProperty());
@@ -104,9 +98,17 @@ public class InwestorController {
         iloscAkcjaColumn.setCellValueFactory(cellData -> cellData.getValue().getIloscProperty());
     }
 
-    public void hideStuff(){
+    public void hideStuff() {
         peselLabel.setVisible(false);
         funduszTable.setVisible(false);
+    }
+
+    public void refresh() {
+        PodmiotKupujacyTable.refresh();
+        walutaTable.refresh();
+        surowiecTable.refresh();
+        akcjaTable.refresh();
+        funduszTable.refresh();
     }
 
 }

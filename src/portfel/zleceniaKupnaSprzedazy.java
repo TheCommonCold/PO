@@ -1,69 +1,69 @@
 package portfel;
 
-import aktywa.cenyWalut;
-import aktywa.cenaWaluty;
-import aktywa.waluta;
-import rynek.rynekWalut;
+import aktywa.CenaWaluty;
+import aktywa.CenyWalut;
+import aktywa.Waluta;
+import rynek.RynekWalut;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class zleceniaKupnaSprzedazy {
-    ArrayList<zlecenie> zleceniaKupna = new ArrayList<zlecenie>();
-    ArrayList<zlecenie> zleceniaSprzedazy= new ArrayList<zlecenie>();
+public class ZleceniaKupnaSprzedazy {
+    ArrayList<Zlecenie> zleceniaKupna = new ArrayList<Zlecenie>();
+    ArrayList<Zlecenie> zleceniaSprzedazy = new ArrayList<Zlecenie>();
 
-    public ArrayList<zlecenie> getZleceniaKupna() {
+    public ArrayList<Zlecenie> getZleceniaKupna() {
         return zleceniaKupna;
     }
 
-    public void setZleceniaKupna(ArrayList<zlecenie> zleceniaKupna) {
+    public void setZleceniaKupna(ArrayList<Zlecenie> zleceniaKupna) {
         this.zleceniaKupna = zleceniaKupna;
     }
 
-    public ArrayList<zlecenie> getZleceniaSprzedazy() {
+    public ArrayList<Zlecenie> getZleceniaSprzedazy() {
         return zleceniaSprzedazy;
     }
 
-    public void setZleceniaSprzedazy(ArrayList<zlecenie> zleceniaSprzedazy) {
+    public void setZleceniaSprzedazy(ArrayList<Zlecenie> zleceniaSprzedazy) {
         this.zleceniaSprzedazy = zleceniaSprzedazy;
     }
 
-    public void addZlecenieKupna(zlecenie zlecenie){
-        zleceniaKupna.add(zlecenie);
+    public void addZlecenieKupna(Zlecenie Zlecenie) {
+        zleceniaKupna.add(Zlecenie);
     }
 
-    public void addZlecenieSprzedazy(zlecenie zlecenie){
-        zleceniaSprzedazy.add(zlecenie);
+    public void addZlecenieSprzedazy(Zlecenie Zlecenie) {
+        zleceniaSprzedazy.add(Zlecenie);
     }
 
-    public void resetZlecenia(){
+    public void resetZlecenia() {
         zleceniaKupna.clear();
         zleceniaSprzedazy.clear();
     }
 
-    public void updatePricing(){
-        ArrayList<stackZlecen> zliczoneZlecenia=new ArrayList<stackZlecen>();
-        ArrayList<stackZlecen> listaZmianCen=new ArrayList<stackZlecen>();
-        if(zleceniaKupna.size()>0){
-            zliczZlecenia(zliczoneZlecenia,zleceniaKupna);
-            zliczoneZlecenia.add(new stackZlecen(zleceniaKupna.get(0)));
+    public void updatePricing() {
+        ArrayList<StackZlecen> zliczoneZlecenia = new ArrayList<StackZlecen>();
+        ArrayList<StackZlecen> listaZmianCen = new ArrayList<StackZlecen>();
+        if (zleceniaKupna.size() > 0) {
+            zliczZlecenia(zliczoneZlecenia, zleceniaKupna);
+            zliczoneZlecenia.add(new StackZlecen(zleceniaKupna.get(0)));
         }
-        if(zleceniaSprzedazy.size()>0){
-            zliczZlecenia(zliczoneZlecenia,zleceniaSprzedazy);
-            zliczoneZlecenia.add(new stackZlecen(zleceniaSprzedazy.get(0)));
+        if (zleceniaSprzedazy.size() > 0) {
+            zliczZlecenia(zliczoneZlecenia, zleceniaSprzedazy);
+            zliczoneZlecenia.add(new StackZlecen(zleceniaSprzedazy.get(0)));
         }
-        for(stackZlecen currentStack1:zliczoneZlecenia){
-            for(stackZlecen currentStack2:zliczoneZlecenia){
-                if(currentStack1.getZlecenie().getChceSprzedac().equals(currentStack2.getZlecenie().getChceKupic()) &&currentStack1.getZlecenie().getChceKupic().equals(currentStack2.getZlecenie().getChceSprzedac())){
-                    if(currentStack1.getIlosc()>currentStack2.getIlosc()){
-                        currentStack1.setIlosc(currentStack1.getIlosc()-currentStack2.getIlosc());
+        for (StackZlecen currentStack1 : zliczoneZlecenia) {
+            for (StackZlecen currentStack2 : zliczoneZlecenia) {
+                if (currentStack1.getZlecenie().getChceSprzedac().equals(currentStack2.getZlecenie().getChceKupic()) && currentStack1.getZlecenie().getChceKupic().equals(currentStack2.getZlecenie().getChceSprzedac())) {
+                    if (currentStack1.getIlosc() > currentStack2.getIlosc()) {
+                        currentStack1.setIlosc(currentStack1.getIlosc() - currentStack2.getIlosc());
                         currentStack2.setIlosc(0);
-                        if(!listaZmianCen.contains(currentStack1))listaZmianCen.add(currentStack1);
+                        if (!listaZmianCen.contains(currentStack1)) listaZmianCen.add(currentStack1);
                         listaZmianCen.add(currentStack1);
-                    }else{
-                        currentStack2.setIlosc(currentStack2.getIlosc()-currentStack1.getIlosc());
+                    } else {
+                        currentStack2.setIlosc(currentStack2.getIlosc() - currentStack1.getIlosc());
                         currentStack1.setIlosc(0);
-                        if(!listaZmianCen.contains(currentStack2))listaZmianCen.add(currentStack2);
+                        if (!listaZmianCen.contains(currentStack2)) listaZmianCen.add(currentStack2);
 
                     }
                 }
@@ -72,29 +72,29 @@ public class zleceniaKupnaSprzedazy {
         zmianaCen(listaZmianCen);
     }
 
-    public void zmianaCen(ArrayList<stackZlecen> listaZmianCen){
+    public void zmianaCen(ArrayList<StackZlecen> listaZmianCen) {
         Random generator = new Random();
-        for(stackZlecen zlecenie:listaZmianCen){
-            float ilosc=1 + (zlecenie.getIlosc()/1000);
-            if(zlecenie.getZlecenie().getChceKupic() instanceof waluta && zlecenie.getZlecenie().getChceSprzedac() instanceof waluta){
-                for(cenyWalut cena: ((rynekWalut)zlecenie.getZlecenie().getChceKupic().getRynek()).getListaCen()){
-                    if(cena.getWaluta().equals(zlecenie.getZlecenie().getChceKupic())){
-                        for(cenaWaluty currentWaluta:cena.getWartosc()){
-                            if(currentWaluta.getWaluta().equals(zlecenie.getZlecenie().getChceSprzedac())){
-                                currentWaluta.setCenaSprzedazy(currentWaluta.getCenaSprzedazy()/ilosc);
-                                currentWaluta.setCenaKupna(currentWaluta.getCenaKupna()*ilosc);
+        for (StackZlecen zlecenie : listaZmianCen) {
+            float ilosc = 1 + (zlecenie.getIlosc() / 1000);
+            if (zlecenie.getZlecenie().getChceKupic() instanceof Waluta && zlecenie.getZlecenie().getChceSprzedac() instanceof Waluta) {
+                for (CenyWalut cena : ((RynekWalut) zlecenie.getZlecenie().getChceKupic().getRynek()).getListaCen()) {
+                    if (cena.getWaluta().equals(zlecenie.getZlecenie().getChceKupic())) {
+                        for (CenaWaluty currentWaluta : cena.getWartosc()) {
+                            if (currentWaluta.getWaluta().equals(zlecenie.getZlecenie().getChceSprzedac())) {
+                                currentWaluta.setCenaSprzedazy(currentWaluta.getCenaSprzedazy() / ilosc);
+                                currentWaluta.setCenaKupna(currentWaluta.getCenaKupna() * ilosc);
                                 break;
                             }
                         }
                     }
                     break;
                 }
-                for(cenyWalut cena: ((rynekWalut)zlecenie.getZlecenie().getChceSprzedac().getRynek()).getListaCen()){
-                    if(cena.getWaluta().equals(zlecenie.getZlecenie().getChceSprzedac())){
-                        for(cenaWaluty currentWaluta:cena.getWartosc()){
-                            if(currentWaluta.getWaluta().equals(zlecenie.getZlecenie().getChceKupic())){
-                                currentWaluta.setCenaSprzedazy(currentWaluta.getCenaSprzedazy()/ilosc);
-                                currentWaluta.setCenaKupna(currentWaluta.getCenaKupna()*ilosc);
+                for (CenyWalut cena : ((RynekWalut) zlecenie.getZlecenie().getChceSprzedac().getRynek()).getListaCen()) {
+                    if (cena.getWaluta().equals(zlecenie.getZlecenie().getChceSprzedac())) {
+                        for (CenaWaluty currentWaluta : cena.getWartosc()) {
+                            if (currentWaluta.getWaluta().equals(zlecenie.getZlecenie().getChceKupic())) {
+                                currentWaluta.setCenaSprzedazy(currentWaluta.getCenaSprzedazy() / ilosc);
+                                currentWaluta.setCenaKupna(currentWaluta.getCenaKupna() * ilosc);
                                 break;
                             }
                         }
@@ -105,18 +105,18 @@ public class zleceniaKupnaSprzedazy {
         }
     }
 
-    public void zliczZlecenia(ArrayList<stackZlecen> zliczoneZlecenia,ArrayList<zlecenie> zleceniaSprzedazy){
-        for(zlecenie currentZlecenie:zleceniaSprzedazy) {
-            boolean flag=false;
-            for(stackZlecen currentStack:zliczoneZlecenia){
-                if(currentStack.isTheSame(currentZlecenie)) {
+    public void zliczZlecenia(ArrayList<StackZlecen> zliczoneZlecenia, ArrayList<Zlecenie> zleceniaSprzedazy) {
+        for (Zlecenie currentZlecenie : zleceniaSprzedazy) {
+            boolean flag = false;
+            for (StackZlecen currentStack : zliczoneZlecenia) {
+                if (currentStack.isTheSame(currentZlecenie)) {
                     currentStack.incrementIlosc();
                     flag = true;
                     break;
                 }
             }
-            if(flag==true){
-                zliczoneZlecenia.add(new stackZlecen(currentZlecenie));
+            if (flag == true) {
+                zliczoneZlecenia.add(new StackZlecen(currentZlecenie));
             }
         }
     }

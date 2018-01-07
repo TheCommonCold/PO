@@ -1,20 +1,20 @@
 package portfel;
 
-public class stackZlecen {
-    private zlecenie zlecenie;
+public class StackZlecen {
+    private Zlecenie Zlecenie;
     private int ilosc;
 
-    public stackZlecen(zlecenie zlecenie){
-        this.zlecenie=zlecenie;
-        ilosc=1;
+    public StackZlecen(Zlecenie Zlecenie) {
+        this.Zlecenie = Zlecenie;
+        ilosc = 1;
     }
 
-    public zlecenie getZlecenie() {
-        return zlecenie;
+    public Zlecenie getZlecenie() {
+        return Zlecenie;
     }
 
-    public void setZlecenie(zlecenie zlecenie) {
-        this.zlecenie = zlecenie;
+    public void setZlecenie(Zlecenie Zlecenie) {
+        this.Zlecenie = Zlecenie;
     }
 
     public int getIlosc() {
@@ -25,10 +25,12 @@ public class stackZlecen {
         this.ilosc = ilosc;
     }
 
-    public void incrementIlosc(){ilosc++;}
+    public void incrementIlosc() {
+        ilosc++;
+    }
 
-    public boolean isTheSame(zlecenie currentZlecenie){
-        if(zlecenie.getChceKupic().equals(currentZlecenie.getChceKupic()) && zlecenie.getChceSprzedac().equals(currentZlecenie.getChceSprzedac())){
+    public boolean isTheSame(Zlecenie currentZlecenie) {
+        if (Zlecenie.getChceKupic().equals(currentZlecenie.getChceKupic()) && Zlecenie.getChceSprzedac().equals(currentZlecenie.getChceSprzedac())) {
             return true;
         }
         return false;

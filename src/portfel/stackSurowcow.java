@@ -1,22 +1,20 @@
 package portfel;
 
-import aktywa.surowiec;
+import aktywa.Surowiec;
 
-import java.util.Random;
+public class StackSurowcow extends StackAktyw {
+    private Surowiec Surowiec;
 
-public class stackSurowcow extends stackAktyw {
-    private aktywa.surowiec surowiec;
-
-    public stackSurowcow(surowiec surowiec,float ilosc){
-        this.surowiec=surowiec;
+    public StackSurowcow(Surowiec Surowiec, float ilosc) {
+        this.Surowiec = Surowiec;
         setIlosc(ilosc);
     }
 
-    public surowiec getSurowiec() {
-        return surowiec;
+    public Surowiec getSurowiec() {
+        return Surowiec;
     }
 
-    public void setSurowiec(surowiec surowiec) {
-        this.surowiec = surowiec;
+    public void setSurowiec(Surowiec Surowiec) {
+        this.Surowiec = Surowiec;
     }
 }

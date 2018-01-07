@@ -1,41 +1,39 @@
 package GUI;
 
+import aktywa.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import rynek.rynekAkcji;
-import aktywa.cenaWaluty;
-import aktywa.aktywa;
-import aktywa.waluta;
-import aktywa.surowiec;
-import aktywa.akcje;
-import spolka.spolka;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import rynek.rynekWalut;
+import rynek.RynekAkcji;
+import rynek.RynekWalut;
+import spolka.Spolka;
 import życie.DaneRynku;
 
 import java.util.Random;
 
 
-public class aktywaController {
+public class AktywaController {
+    DaneRynku daneRynku;
+    Spolka currentlySelectedSpolka;
     @FXML
-    private TableView<aktywa> walutaTable;
+    private TableView<Aktywa> walutaTable;
     @FXML
-    private TableView<cenaWaluty> cenyTable;
-
+    private TableView<CenaWaluty> cenyTable;
     @FXML
-    private TableColumn<aktywa, String> nazwaColumn;
+    private TableColumn<Aktywa, String> nazwaColumn;
     @FXML
-    private TableColumn<cenaWaluty, String> nazwaInnejWalutyColumn;
+    private TableColumn<CenaWaluty, String> nazwaInnejWalutyColumn;
     @FXML
-    private TableColumn<cenaWaluty, String> cenaKupnaColumn;
+    private TableColumn<CenaWaluty, String> cenaKupnaColumn;
     @FXML
-    private TableColumn<cenaWaluty, String> cenaSprzedazyColumn;
-
+    private TableColumn<CenaWaluty, String> cenaSprzedazyColumn;
     @FXML
-    private TableColumn<aktywa, String> rynekColumn;
-
+    private TableColumn<Aktywa, String> rynekColumn;
     @FXML
     private Label nazwaWalutyLabel;
     @FXML
@@ -86,9 +84,8 @@ public class aktywaController {
     private Label kapitalZakladowyLabel;
     @FXML
     private Label wolumenLabel;
-
-
-
+    @FXML
+    private Label obrotyLabel;
     @FXML
     private GridPane walutyGrid;
     @FXML
@@ -101,11 +98,18 @@ public class aktywaController {
     private TextField cenaWykupuField;
     @FXML
     private Button wykupButton;
-
-
-
-    DaneRynku daneRynku;
-    spolka currentlySelectedSpolka;
+    @FXML
+    private LineChart aktywaLineChart;
+    @FXML
+    private NumberAxis aktywaXAxis;
+    @FXML
+    private NumberAxis aktywaYAxis;
+    @FXML
+    private LineChart walutaLineChart;
+    @FXML
+    private NumberAxis walutaXAxis;
+    @FXML
+    private NumberAxis walutaYAxis;
 
     public DaneRynku getDaneRynku() {
         return daneRynku;
@@ -116,9 +120,9 @@ public class aktywaController {
         walutaTable.setItems(daneRynku.getAktywaData());
     }
 
-    public void handleWykup(){
+    public void handleWykup() {
         Random generator = new Random();
-        currentlySelectedSpolka.wykupAkcji(daneRynku.getPodmiotKupujacyData(),Float.parseFloat(cenaWykupuField.getText()));
+        currentlySelectedSpolka.wykupAkcji(daneRynku.getPodmiotKupujacyData(), Float.parseFloat(cenaWykupuField.getText()));
     }
 
     @FXML
@@ -139,57 +143,122 @@ public class aktywaController {
         cenaSprzedazyColumn.setCellValueFactory(cellData -> cellData.getValue().getCenaSprzedazyProperty());
         hideStuff();
         walutaTable.getSelectionModel().selectedItemProperty().addListener(
-                ((observable, oldValue, newValue) -> showWaluta(newValue) )
+                ((observable, oldValue, newValue) -> showWaluta(newValue))
         );
     }
 
-    private void showWaluta(aktywa aktywo){
+    private void showWaluta(Aktywa aktywo) {
         hideStuff();
-        if(aktywo instanceof waluta ){
+        if (aktywo instanceof Waluta) {
+            walutaLineChart.setVisible(true);
             cenyTable.setVisible(true);
             walutyGrid.setVisible(true);
-            cenyTable.setItems(((rynekWalut)aktywo.getRynek()).getCenaWaluty((waluta)aktywo).getWartosc());
+            cenyTable.setItems(((RynekWalut) aktywo.getRynek()).getCenaWaluty((Waluta) aktywo).getWartosc());
             nazwaWalutyLabel.setText(aktywo.getNazwa());
-            listaKrajowLabel.setText(((waluta)aktywo).displayListaKrajow());
+            listaKrajowLabel.setText(((Waluta) aktywo).displayListaKrajow());
             rynekWalutyLabel.setText(aktywo.getRynek().getNazwa());
+            cenyTable.getSelectionModel().selectedItemProperty().addListener(
+                    ((observable, oldValue, newValue) -> rysujWykresWalut(newValue)));
         }
-        if(aktywo instanceof surowiec){
+        if (aktywo instanceof Surowiec) {
+            rysujWykres(aktywo);
             surowceGrid.setVisible(true);
+            aktywaLineChart.setVisible(true);
             nazwaSurowcaLabel.setText(aktywo.getNazwa());
             rynekSurowcaLabel.setText(aktywo.getRynek().getNazwa());
-            jednostkaHandlowaLabel.setText(((surowiec)aktywo).getJednostkaHandlowa());
-            walutaSurowcaLabel.setText(((surowiec)aktywo).getWaluta().getNazwa());
-            wartoscSurowcaLabel.setText(Float.toString(((surowiec)aktywo).getWartosc()));
-            wartoscMinimalnaLabel.setText(Float.toString(((surowiec)aktywo).getWartoscMinimalna()));
-            wartoscMaksymalnaLabel.setText(Float.toString(((surowiec)aktywo).getWartoscMaksymalna()));
+            jednostkaHandlowaLabel.setText(((Surowiec) aktywo).getJednostkaHandlowa());
+            walutaSurowcaLabel.setText(((Surowiec) aktywo).getWaluta().getNazwa());
+            wartoscSurowcaLabel.setText(Float.toString(((Surowiec) aktywo).getWartosc()));
+            wartoscMinimalnaLabel.setText(Float.toString(((Surowiec) aktywo).getWartoscMinimalna()));
+            wartoscMaksymalnaLabel.setText(Float.toString(((Surowiec) aktywo).getWartoscMaksymalna()));
 
         }
-        if(aktywo instanceof akcje){
-            currentlySelectedSpolka=((akcje) aktywo).getSpolka();
+        if (aktywo instanceof Akcje) {
+            rysujWykres(aktywo);
+            currentlySelectedSpolka = ((Akcje) aktywo).getSpolka();
             wykupBar.setVisible(true);
             akcjeGrid.setVisible(true);
-            nazwaSpolkiLabel.setText(((akcje)aktywo).getSpolka().getName());
+            aktywaLineChart.setVisible(true);
+            nazwaSpolkiLabel.setText(((Akcje) aktywo).getSpolka().getName());
             rynekSpolkiLabel.setText(aktywo.getRynek().getNazwa());
-            dataPierwszejWycenyLabel.setText(((akcje)aktywo).getSpolka().getDataPierwszejWyceny().toString());
-            wartoscSpolkiLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getWartosc()));
-            walutaSpolkiLabel.setText(((rynekAkcji)aktywo.getRynek()).getWalutaRynku().getNazwa());
-            kursOtwarciaLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getKursOtwarcia()));
-            minimalnyKursiLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getMinimalnyKurs()));
-            maksymalnyKursLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getMaksymalnyKurs()));
+            dataPierwszejWycenyLabel.setText(((Akcje) aktywo).getSpolka().getDataPierwszejWyceny().toString());
+            wartoscSpolkiLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getWartosc()));
+            walutaSpolkiLabel.setText(((RynekAkcji) aktywo.getRynek()).getWalutaRynku().getNazwa());
+            kursOtwarciaLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getKursOtwarcia()));
+            minimalnyKursiLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getMinimalnyKurs()));
+            maksymalnyKursLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getMaksymalnyKurs()));
             akcjaLabel.setText(aktywo.getNazwa());
-            liczbaAkcjiLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getLiczbaAkcji()));
-            zyskLabel.setText(Double.toString(((akcje)aktywo).getSpolka().getZysk()));
-            przychodLabel.setText(Double.toString(((akcje)aktywo).getSpolka().getPrzychod()));
-            kapitalWlasnyLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getKapitalWlasny()));
-            kapitalZakladowyLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getKapitalZakladowy()));
-            wolumenLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getWolumen()));
+            liczbaAkcjiLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getLiczbaAkcji()));
+            zyskLabel.setText(Double.toString(((Akcje) aktywo).getSpolka().getZysk()));
+            przychodLabel.setText(Double.toString(((Akcje) aktywo).getSpolka().getPrzychod()));
+            kapitalWlasnyLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getKapitalWlasny()));
+            kapitalZakladowyLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getKapitalZakladowy()));
+            wolumenLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getWolumen()));
+            obrotyLabel.setText(Float.toString(((Akcje) aktywo).getSpolka().getObroty()));
         }
     }
-    private void hideStuff(){
+
+    private void hideStuff() {
+        walutaLineChart.setVisible(false);
         cenyTable.setVisible(false);
         walutyGrid.setVisible(false);
         surowceGrid.setVisible(false);
         akcjeGrid.setVisible(false);
         wykupBar.setVisible(false);
+        aktywaLineChart.setVisible(false);
+    }
+
+    public void refresh() {
+        walutaTable.refresh();
+        cenyTable.refresh();
+    }
+
+    public void rysujWykres(Aktywa Aktywa) {
+        aktywaLineChart.setCreateSymbols(false);
+        aktywaLineChart.getXAxis().setAutoRanging(true);
+        aktywaLineChart.getYAxis().setAutoRanging(true);
+        aktywaLineChart.getData().clear();
+        aktywaXAxis = new NumberAxis(0, daneRynku.getLiczbaTur(), 1);
+        aktywaXAxis.setLabel("Tury");
+        if (Aktywa instanceof Surowiec) {
+            aktywaYAxis = new NumberAxis(((Surowiec) Aktywa).getWartoscMinimalna() * 0.9, ((Surowiec) Aktywa).getWartoscMaksymalna() * 1.1, 10);
+        }
+        if (Aktywa instanceof Akcje) {
+            aktywaYAxis = new NumberAxis(((Akcje) Aktywa).getSpolka().getMinimalnyKurs() * 0.9, ((Akcje) Aktywa).getSpolka().getMaksymalnyKurs() * 1.1, 10);
+        }
+        ;
+        aktywaYAxis.setLabel("Wartość");
+        XYChart.Series series = new XYChart.Series();
+        int i = 0;
+        for (double wartosc : Aktywa.getListaWartosci()) {
+            series.getData().add(new XYChart.Data(i, wartosc));
+            i++;
+        }
+        aktywaLineChart.getData().add(series);
+    }
+
+    public void rysujWykresWalut(CenaWaluty CenaWaluty) {
+        try {
+            walutaLineChart.setCreateSymbols(false);
+            walutaLineChart.getXAxis().setAutoRanging(true);
+            walutaLineChart.getYAxis().setAutoRanging(true);
+            walutaLineChart.getData().clear();
+            //Defining X axis
+            walutaXAxis = new NumberAxis(0, daneRynku.getLiczbaTur(), 1);
+            walutaXAxis.setLabel("Tury");
+            //Defining y axis
+            walutaYAxis = new NumberAxis(0, 1000, 10);
+            walutaYAxis.setLabel("Wartość");
+            XYChart.Series series = new XYChart.Series();
+            int i = 0;
+            for (double wartosc : CenaWaluty.getListaWartosciKupna()) {
+                series.getData().add(new XYChart.Data(i, wartosc));
+                i++;
+            }
+            walutaLineChart.getData().add(series);
+            ;
+        } catch (NullPointerException e) {
+
+        }
     }
 }

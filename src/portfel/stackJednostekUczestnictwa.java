@@ -1,19 +1,20 @@
 package portfel;
-import aktywa.jednostkaUczestnictwa;
 
-public class stackJednostekUczestnictwa extends stackAktyw {
-    private jednostkaUczestnictwa jednostkaUczestnictwa;
+import aktywa.JednostkaUczestnictwa;
 
-    public stackJednostekUczestnictwa(jednostkaUczestnictwa jednostkaUczestnictwa, float ilosc){
-        this.jednostkaUczestnictwa=jednostkaUczestnictwa;
+public class StackJednostekUczestnictwa extends StackAktyw {
+    private JednostkaUczestnictwa JednostkaUczestnictwa;
+
+    public StackJednostekUczestnictwa(JednostkaUczestnictwa JednostkaUczestnictwa, float ilosc) {
+        this.JednostkaUczestnictwa = JednostkaUczestnictwa;
         setIlosc(ilosc);
     }
 
-    public aktywa.jednostkaUczestnictwa getJednostkaUczestnictwa() {
-        return jednostkaUczestnictwa;
+    public JednostkaUczestnictwa getJednostkaUczestnictwa() {
+        return JednostkaUczestnictwa;
     }
 
-    public void setJednostkaUczestnictwa(aktywa.jednostkaUczestnictwa jednostkaUczestnictwa) {
-        this.jednostkaUczestnictwa = jednostkaUczestnictwa;
+    public void setJednostkaUczestnictwa(JednostkaUczestnictwa JednostkaUczestnictwa) {
+        this.JednostkaUczestnictwa = JednostkaUczestnictwa;
     }
 }

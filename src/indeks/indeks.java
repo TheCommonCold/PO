@@ -1,10 +1,21 @@
 package indeks;
-import spolka.spolka;
 
-import java.util.*;
-public class indeks {
+import aktywa.Akcje;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class Indeks implements Serializable {
     private String nazwa;
-    private Set<spolka> listSpolek;
+    private transient ObservableList<Akcje> listSpolek = FXCollections.observableArrayList();
+    private List<Akcje> listaSpolekZapis;
+
+    public Indeks(String nazwa) {
+        this.nazwa = nazwa;
+    }
 
     public String getNazwa() {
         return nazwa;
@@ -14,11 +25,19 @@ public class indeks {
         this.nazwa = nazwa;
     }
 
-    public Set<spolka> getListSpolek() {
+    public ObservableList<Akcje> getListSpolek() {
         return listSpolek;
     }
 
-    public void setListSpolek(Set<spolka> listSpolek) {
+    public void setListSpolek(ObservableList<Akcje> listSpolek) {
         this.listSpolek = listSpolek;
+    }
+
+    public void addNewSpolka(Akcje Akcje) {
+        listSpolek.add(Akcje);
+    }
+
+    public SimpleStringProperty getNazwaProperty() {
+        return new SimpleStringProperty(nazwa);
     }
 }

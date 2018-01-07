@@ -1,40 +1,40 @@
 package portfel;
-import aktywa.aktywa;
 
-import kupujacy.podmiotKupujacy;
+import aktywa.Aktywa;
+import kupujacy.PodmiotKupujacy;
 
-public class zlecenie {
-    private podmiotKupujacy zlecacz;
-    private aktywa chceKupic;
-    private aktywa chceSprzedac;
+public class Zlecenie {
+    private PodmiotKupujacy zlecacz;
+    private Aktywa chceKupic;
+    private Aktywa chceSprzedac;
 
-    public zlecenie(podmiotKupujacy zlecacz, aktywa chceKupic,aktywa chceSprzedac){
-        this.zlecacz=zlecacz;
-        this.chceKupic=chceKupic;
-        this.chceSprzedac=chceSprzedac;
+    public Zlecenie(PodmiotKupujacy zlecacz, Aktywa chceKupic, Aktywa chceSprzedac) {
+        this.zlecacz = zlecacz;
+        this.chceKupic = chceKupic;
+        this.chceSprzedac = chceSprzedac;
     }
 
-    public podmiotKupujacy getZlecacz() {
+    public PodmiotKupujacy getZlecacz() {
         return zlecacz;
     }
 
-    public void setZlecacz(podmiotKupujacy zlecacz) {
+    public void setZlecacz(PodmiotKupujacy zlecacz) {
         this.zlecacz = zlecacz;
     }
 
-    public aktywa getChceKupic() {
+    public Aktywa getChceKupic() {
         return chceKupic;
     }
 
-    public void setChceKupic(aktywa chceKupic) {
+    public void setChceKupic(Aktywa chceKupic) {
         this.chceKupic = chceKupic;
     }
 
-    public aktywa getChceSprzedac() {
+    public Aktywa getChceSprzedac() {
         return chceSprzedac;
     }
 
-    public void setChceSprzedac(aktywa chceSprzedac) {
+    public void setChceSprzedac(Aktywa chceSprzedac) {
         this.chceSprzedac = chceSprzedac;
     }
 }

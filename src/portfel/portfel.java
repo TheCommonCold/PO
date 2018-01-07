@@ -1,103 +1,135 @@
 package portfel;
 
-import aktywa.aktywa;
-import aktywa.jednostkaUczestnictwa;
+import aktywa.Aktywa;
+import aktywa.JednostkaUczestnictwa;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 
-import java.util.*;
-public class portfel {
-    private ObservableList<stackAkcji> akcje;
-    private ObservableList<stackWalut> waluty;
-    private ObservableList<stackSurowcow> surowce;
-    private ObservableList<stackJednostekUczestnictwa> jednostkiUczestnictwa;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-    public portfel(){
+public class Portfel implements Serializable {
+    private transient ObservableList<StackAkcji> akcje;
+    private transient ObservableList<StackWalut> waluty;
+    private transient ObservableList<StackSurowcow> surowce;
+    private transient ObservableList<StackJednostekUczestnictwa> jednostkiUczestnictwa;
+
+    private List<StackAkcji> akcjeZapis;
+    private List<StackWalut> walutyZapis;
+    private List<StackSurowcow> surowceZapis;
+    private List<StackJednostekUczestnictwa> jednostekUczestnictwaZapis;
+
+    public Portfel() {
         akcje = FXCollections.observableArrayList();
         waluty = FXCollections.observableArrayList();
         surowce = FXCollections.observableArrayList();
-        jednostkiUczestnictwa=FXCollections.observableArrayList();
+        jednostkiUczestnictwa = FXCollections.observableArrayList();
     }
 
-    public stackWalut getStackWaluty(aktywa waluta){
-        for(stackWalut currentStackWalut:waluty){
-            if(currentStackWalut.getWaluta().equals(waluta)){
+    public void zapis() {
+        akcjeZapis = new ArrayList<>(akcje);
+        walutyZapis = new ArrayList<>(waluty);
+        surowceZapis = new ArrayList<>(surowce);
+        jednostekUczestnictwaZapis = new ArrayList<>(jednostkiUczestnictwa);
+    }
+
+    public void wczyt() {
+        akcje.clear();
+        waluty.clear();
+        surowce.clear();
+        jednostkiUczestnictwa.clear();
+        akcje.addAll(akcjeZapis);
+        waluty.addAll(walutyZapis);
+        surowce.addAll(surowceZapis);
+        jednostkiUczestnictwa.addAll(jednostekUczestnictwaZapis);
+        akcjeZapis = null;
+        walutyZapis = null;
+        surowceZapis = null;
+        jednostekUczestnictwaZapis = null;
+    }
+
+    public StackWalut getStackWaluty(Aktywa waluta) {
+        for (StackWalut currentStackWalut : waluty) {
+            if (currentStackWalut.getWaluta().equals(waluta)) {
                 return currentStackWalut;
             }
         }
         return null;
     }
-    public stackSurowcow getStackSurowcow(aktywa surowiec){
-        for(stackSurowcow currentStackSurowcow:surowce){
-            if(currentStackSurowcow.getSurowiec().equals(surowiec)){
+
+    public StackSurowcow getStackSurowcow(Aktywa surowiec) {
+        for (StackSurowcow currentStackSurowcow : surowce) {
+            if (currentStackSurowcow.getSurowiec().equals(surowiec)) {
                 return currentStackSurowcow;
             }
         }
         return null;
     }
 
-    public stackAkcji getStackAkcji(aktywa akcja){
-        for(stackAkcji currentStackAkcji:akcje){
-            if(currentStackAkcji.getAkcja().equals(akcja)){
+    public StackAkcji getStackAkcji(Aktywa akcja) {
+        for (StackAkcji currentStackAkcji : akcje) {
+            if (currentStackAkcji.getAkcja().equals(akcja)) {
                 return currentStackAkcji;
             }
         }
         return null;
     }
 
-    public stackJednostekUczestnictwa getStackJednostekUczestnictwa(jednostkaUczestnictwa jednostkaUczestnictwa){
-        for(stackJednostekUczestnictwa currentStackJednostek:jednostkiUczestnictwa){
-            if(currentStackJednostek.getJednostkaUczestnictwa().equals(jednostkaUczestnictwa)){
+    public StackJednostekUczestnictwa getStackJednostekUczestnictwa(JednostkaUczestnictwa JednostkaUczestnictwa) {
+        for (StackJednostekUczestnictwa currentStackJednostek : jednostkiUczestnictwa) {
+            if (currentStackJednostek.getJednostkaUczestnictwa().equals(JednostkaUczestnictwa)) {
                 return currentStackJednostek;
             }
         }
         return null;
     }
 
-    public void addNowaAkcja(stackAkcji akcje){
+    public void addNowaAkcja(StackAkcji akcje) {
         this.akcje.add(akcje);
     }
 
-    public void addNowySurowiec(stackSurowcow surowiec){
+    public void addNowySurowiec(StackSurowcow surowiec) {
         this.surowce.add(surowiec);
     }
 
-    public void addNowaWaluta(stackWalut waluta){
+    public void addNowaWaluta(StackWalut waluta) {
         this.waluty.add(waluta);
     }
 
-    public void addNowaJednostkaUczestnictwa(stackJednostekUczestnictwa jednostkaUczestnictwa){this.jednostkiUczestnictwa.add(jednostkaUczestnictwa);}
+    public void addNowaJednostkaUczestnictwa(StackJednostekUczestnictwa jednostkaUczestnictwa) {
+        this.jednostkiUczestnictwa.add(jednostkaUczestnictwa);
+    }
 
-    public ObservableList<stackAkcji> getAkcje() {
+    public ObservableList<StackAkcji> getAkcje() {
         return akcje;
     }
 
-    public void setAkcje(ObservableList<stackAkcji> akcje) {
+    public void setAkcje(ObservableList<StackAkcji> akcje) {
         this.akcje = akcje;
     }
 
-    public ObservableList<stackWalut> getWaluty() {
+    public ObservableList<StackWalut> getWaluty() {
         return waluty;
     }
 
-    public void setWaluty(ObservableList<stackWalut> waluty) {
+    public void setWaluty(ObservableList<StackWalut> waluty) {
         this.waluty = waluty;
     }
 
-    public ObservableList<stackSurowcow> getSurowce() {
+    public ObservableList<StackSurowcow> getSurowce() {
         return surowce;
     }
 
-    public void setSurowce(ObservableList<stackSurowcow> surowce) {
+    public void setSurowce(ObservableList<StackSurowcow> surowce) {
         this.surowce = surowce;
     }
 
-    public ObservableList<stackJednostekUczestnictwa> getJednostkiUczestnictwa() {
+    public ObservableList<StackJednostekUczestnictwa> getJednostkiUczestnictwa() {
         return jednostkiUczestnictwa;
     }
 
-    public void setJednostkiUczestnictwa(ObservableList<stackJednostekUczestnictwa> jednostkiUczestnictwa) {
+    public void setJednostkiUczestnictwa(ObservableList<StackJednostekUczestnictwa> jednostkiUczestnictwa) {
         this.jednostkiUczestnictwa = jednostkiUczestnictwa;
     }
 }

@@ -1,44 +1,50 @@
 package aktywa;
 
+import Nazwy.LosoweNazwy;
 import javafx.collections.ObservableList;
-import rynek.rynekSurowcow;
+import rynek.RynekSurowcow;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class surowiec extends aktywa {
+public class Surowiec extends Aktywa {
     private String jednostkaHandlowa;
-    private waluta waluta;
+    private Waluta Waluta;
     private float wartosc;
     private float wartoscMinimalna;
     private float wartoscMaksymalna;
+    private float wartoscPoczatkowa;
+    private List<Float> listaWartosci = new ArrayList<>();
 
-    public surowiec(rynekSurowcow rynek, ObservableList<waluta> walutaData){
+    public Surowiec(RynekSurowcow rynek, ObservableList<Waluta> walutaData, LosoweNazwy nazwy) {
         Random generator = new Random();
         setNazwa(Integer.toString(generator.nextInt()));
-        defaultSurowiecConstructor(rynek,walutaData);
+        defaultSurowiecConstructor(rynek, walutaData, nazwy);
     }
 
-    public surowiec(rynekSurowcow rynek,ObservableList<waluta> walutaData, String nazwa){
+    public Surowiec(RynekSurowcow rynek, ObservableList<Waluta> walutaData, LosoweNazwy nazwy, String nazwa) {
         setNazwa(nazwa);
-        defaultSurowiecConstructor(rynek,walutaData);
+        defaultSurowiecConstructor(rynek, walutaData, nazwy);
     }
 
-    public void defaultSurowiecConstructor(rynekSurowcow rynek,ObservableList<waluta> walutaData){
+    public void defaultSurowiecConstructor(RynekSurowcow rynek, ObservableList<Waluta> walutaData, LosoweNazwy nazwy) {
         Random generator = new Random();
-        jednostkaHandlowa = Integer.toString(generator.nextInt());
+        jednostkaHandlowa = nazwy.getNazweJednostki();
         int stop = generator.nextInt(walutaData.size());
-        int i=0;
-        for(waluta waluta:walutaData){
-            if(i==stop){
-                this.waluta=waluta;
+        int i = 0;
+        for (Waluta Waluta : walutaData) {
+            if (i == stop) {
+                this.Waluta = Waluta;
                 break;
             }
             i++;
         }
         setRynek(rynek);
-        wartosc = generator.nextInt(10000)+generator.nextFloat();
+        wartosc = generator.nextInt(10000) + generator.nextFloat();
         wartoscMinimalna = wartosc;
         wartoscMaksymalna = wartosc;
+        wartoscPoczatkowa = wartosc;
         rynek.addNewSurowiec(this);
     }
 
@@ -50,12 +56,12 @@ public class surowiec extends aktywa {
         this.jednostkaHandlowa = jednostkaHandlowa;
     }
 
-    public waluta getWaluta() {
-        return waluta;
+    public Waluta getWaluta() {
+        return Waluta;
     }
 
-    public void setWaluta(waluta waluta) {
-        this.waluta = waluta;
+    public void setWaluta(Waluta Waluta) {
+        this.Waluta = Waluta;
     }
 
     public float getWartosc() {
@@ -63,7 +69,10 @@ public class surowiec extends aktywa {
     }
 
     public void setWartosc(float wartosc) {
+
         this.wartosc = wartosc;
+        if (wartosc > wartoscMaksymalna) wartoscMaksymalna = wartosc;
+        if (wartosc < wartoscMinimalna) wartoscMinimalna = wartosc;
     }
 
     public float getWartoscMinimalna() {
@@ -80,5 +89,13 @@ public class surowiec extends aktywa {
 
     public void setWartoscMaksymalna(int wartoscMaksymalna) {
         this.wartoscMaksymalna = wartoscMaksymalna;
+    }
+
+    public float getWartoscPoczatkowa() {
+        return wartoscPoczatkowa;
+    }
+
+    public void setWartoscPoczatkowa(float wartoscPoczatkowa) {
+        this.wartoscPoczatkowa = wartoscPoczatkowa;
     }
 }
