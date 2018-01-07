@@ -53,7 +53,7 @@ public class mainGUIController {
         try {
             aktywa.getChildren().setAll((Node) loaderAktywa.load());
             inwestorzy.getChildren().setAll((Node) loaderInwestor.load());
-            rynki.getChildren().setAll((Node) loaderInwestor.load());
+            rynki.getChildren().setAll((Node) loaderRynki.load());
 
         }
         catch(IOException e){

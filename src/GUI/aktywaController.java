@@ -1,16 +1,21 @@
 package GUI;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import rynek.rynekAkcji;
 import aktywa.cenaWaluty;
 import aktywa.aktywa;
 import aktywa.waluta;
 import aktywa.surowiec;
 import aktywa.akcje;
+import spolka.spolka;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import rynek.rynekWalut;
 import życie.DaneRynku;
+
+import java.util.Random;
 
 
 public class aktywaController {
@@ -90,10 +95,17 @@ public class aktywaController {
     private GridPane surowceGrid;
     @FXML
     private GridPane akcjeGrid;
+    @FXML
+    private ButtonBar wykupBar;
+    @FXML
+    private TextField cenaWykupuField;
+    @FXML
+    private Button wykupButton;
 
 
 
     DaneRynku daneRynku;
+    spolka currentlySelectedSpolka;
 
     public DaneRynku getDaneRynku() {
         return daneRynku;
@@ -104,9 +116,22 @@ public class aktywaController {
         walutaTable.setItems(daneRynku.getAktywaData());
     }
 
+    public void handleWykup(){
+        Random generator = new Random();
+        currentlySelectedSpolka.wykupAkcji(daneRynku.getPodmiotKupujacyData(),Float.parseFloat(cenaWykupuField.getText()));
+    }
+
     @FXML
     private void initialize() {
-        // Initialize the person table with the two columns.
+        cenaWykupuField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    cenaWykupuField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         nazwaColumn.setCellValueFactory(cellData -> cellData.getValue().getNazwaProperty());
         rynekColumn.setCellValueFactory(cellData -> cellData.getValue().getRynekProperty());
         nazwaInnejWalutyColumn.setCellValueFactory(cellData -> cellData.getValue().getWaluta().getNazwaProperty());
@@ -140,6 +165,8 @@ public class aktywaController {
 
         }
         if(aktywo instanceof akcje){
+            currentlySelectedSpolka=((akcje) aktywo).getSpolka();
+            wykupBar.setVisible(true);
             akcjeGrid.setVisible(true);
             nazwaSpolkiLabel.setText(((akcje)aktywo).getSpolka().getName());
             rynekSpolkiLabel.setText(aktywo.getRynek().getNazwa());
@@ -151,8 +178,8 @@ public class aktywaController {
             maksymalnyKursLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getMaksymalnyKurs()));
             akcjaLabel.setText(aktywo.getNazwa());
             liczbaAkcjiLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getLiczbaAkcji()));
-            zyskLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getZysk()));
-            przychodLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getPrzychod()));
+            zyskLabel.setText(Double.toString(((akcje)aktywo).getSpolka().getZysk()));
+            przychodLabel.setText(Double.toString(((akcje)aktywo).getSpolka().getPrzychod()));
             kapitalWlasnyLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getKapitalWlasny()));
             kapitalZakladowyLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getKapitalZakladowy()));
             wolumenLabel.setText(Float.toString(((akcje)aktywo).getSpolka().getWolumen()));
@@ -163,5 +190,6 @@ public class aktywaController {
         walutyGrid.setVisible(false);
         surowceGrid.setVisible(false);
         akcjeGrid.setVisible(false);
+        wykupBar.setVisible(false);
     }
 }

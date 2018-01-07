@@ -6,16 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import kupujacy.inwestor;
-import portfel.stackAkcji;
-import portfel.stackAktyw;
-import portfel.stackSurowcow;
-import portfel.stackWalut;
+import kupujacy.podmiotKupujacy;
+import portfel.*;
 import życie.DaneRynku;
 
 public class InwestorController {
 
     @FXML
-    private TableView<inwestor> inwestorTable;
+    private TableView<podmiotKupujacy> PodmiotKupujacyTable;
     @FXML
     private TableView<stackWalut> walutaTable;
     @FXML
@@ -23,12 +21,14 @@ public class InwestorController {
     @FXML
     private TableView<stackAkcji> akcjaTable;
     @FXML
-    private TableColumn<inwestor, String> imieColumn;
+    private TableView<stackJednostekUczestnictwa> funduszTable;
 
     @FXML
-    private TableColumn<inwestor, String> nazwiskoColumn;
+    private TableColumn<podmiotKupujacy, String> imieColumn;
     @FXML
-    private TableColumn<inwestor, String> peselColumn;
+    private TableColumn<podmiotKupujacy, String> nazwiskoColumn;
+    @FXML
+    private TableColumn<podmiotKupujacy, String> typColumn;
 
     @FXML
     private TableColumn<stackWalut, String> walutaColumn;
@@ -36,6 +36,8 @@ public class InwestorController {
     private TableColumn<stackSurowcow, String> surowiecColumn;
     @FXML
     private TableColumn<stackAkcji, String> akcjaColumn;
+    @FXML
+    private TableColumn<stackJednostekUczestnictwa,String>funduszColumn;
 
     @FXML
     private TableColumn<stackWalut, String> iloscWalutaColumn;
@@ -43,6 +45,10 @@ public class InwestorController {
     private TableColumn<stackSurowcow, String> iloscSurowiecColumn;
     @FXML
     private TableColumn<stackAkcji, String> iloscAkcjaColumn;
+    @FXML
+    private TableColumn<stackJednostekUczestnictwa,String> iloscJednostekColumn;
+
+
 
     @FXML
     private Label imieLabel;
@@ -60,7 +66,7 @@ public class InwestorController {
 
     public void setDaneRynku(DaneRynku daneRynku) {
         this.daneRynku = daneRynku;
-        inwestorTable.setItems(daneRynku.getInwestorData());
+        PodmiotKupujacyTable.setItems(daneRynku.getPodmiotKupujacyData());
     }
 
     @FXML
@@ -68,26 +74,39 @@ public class InwestorController {
         // Initialize the person table with the two columns.
         imieColumn.setCellValueFactory(cellData -> cellData.getValue().getImieProperty());
         nazwiskoColumn.setCellValueFactory(cellData -> cellData.getValue().getNazwiskoProperty());
-        peselColumn.setCellValueFactory(cellData -> cellData.getValue().getPeselProperty());
-        inwestorTable.getSelectionModel().selectedItemProperty().addListener(
+        typColumn.setCellValueFactory(cellData -> cellData.getValue().getTypProperty());
+        PodmiotKupujacyTable.getSelectionModel().selectedItemProperty().addListener(
                 ((observable, oldValue, newValue) -> showInwestor(newValue) )
         );
     }
 
-    public void showInwestor(inwestor inwestor){
-        imieLabel.setText(inwestor.getImie());
-        nazwiskoLabel.setText(inwestor.getNazwisko());
-        peselLabel.setText(Double.toString(inwestor.getPesel()));
-        walutaTable.setItems(inwestor.getAssets().getWaluty());
-        surowiecTable.setItems(inwestor.getAssets().getSurowce());
-        walutaTable.setItems(inwestor.getAssets().getWaluty());
-        akcjaTable.setItems(inwestor.getAssets().getAkcje());
+    public void showInwestor(podmiotKupujacy podmiotKupujacy){
+        hideStuff();
+        imieLabel.setText(podmiotKupujacy.getImie());
+        nazwiskoLabel.setText(podmiotKupujacy.getNazwisko());
+        if(podmiotKupujacy instanceof inwestor){
+            peselLabel.setVisible(true);
+            funduszTable.setVisible(true);
+            peselLabel.setText(Double.toString(((inwestor) podmiotKupujacy).getPesel()));
+            funduszTable.setItems(podmiotKupujacy.getAssets().getJednostkiUczestnictwa());
+            funduszColumn.setCellValueFactory(cellData -> cellData.getValue().getJednostkaUczestnictwa().getFunduszInwestycyjny().getNazwaProperty());
+            iloscJednostekColumn.setCellValueFactory(cellData -> cellData.getValue().getIloscProperty());
+        }
+        walutaTable.setItems(podmiotKupujacy.getAssets().getWaluty());
+        surowiecTable.setItems(podmiotKupujacy.getAssets().getSurowce());
+        walutaTable.setItems(podmiotKupujacy.getAssets().getWaluty());
+        akcjaTable.setItems(podmiotKupujacy.getAssets().getAkcje());
         walutaColumn.setCellValueFactory(cellData -> cellData.getValue().getWaluta().getNazwaProperty());
         surowiecColumn.setCellValueFactory(cellData -> cellData.getValue().getSurowiec().getNazwaProperty());
         akcjaColumn.setCellValueFactory(cellData -> cellData.getValue().getAkcja().getNazwaProperty());
         iloscWalutaColumn.setCellValueFactory(cellData -> cellData.getValue().getIloscProperty());
         iloscSurowiecColumn.setCellValueFactory(cellData -> cellData.getValue().getIloscProperty());
         iloscAkcjaColumn.setCellValueFactory(cellData -> cellData.getValue().getIloscProperty());
+    }
+
+    public void hideStuff(){
+        peselLabel.setVisible(false);
+        funduszTable.setVisible(false);
     }
 
 }

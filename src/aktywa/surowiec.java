@@ -62,7 +62,7 @@ public class surowiec extends aktywa {
         return wartosc;
     }
 
-    public void setWartosc(int wartosc) {
+    public void setWartosc(float wartosc) {
         this.wartosc = wartosc;
     }
 

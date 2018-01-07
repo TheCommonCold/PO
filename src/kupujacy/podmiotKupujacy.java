@@ -2,6 +2,7 @@ package kupujacy;
 import aktywa.surowiec;
 import aktywa.akcje;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import rynek.rynekWalut;
 import rynek.rynekAkcji;
 import portfel.portfel;
@@ -21,6 +22,7 @@ public class podmiotKupujacy extends Thread {
     private String nazwisko;
     private portfel assets;
     private float agresja;
+    private String typ;
 
 
     public float getAgresja() {
@@ -55,13 +57,30 @@ public class podmiotKupujacy extends Thread {
         this.assets = assets;
     }
 
+    public void defaultPodmiotKupujacyConstructor(ObservableList<surowiec> surowiecData, ObservableList<waluta> walutaData,String typ) {
+        this.typ=typ;
+        Random generator = new Random();
+        setAgresja((generator.nextFloat()/4)+(1/4));
+        setAssets(new portfel());
+        for(surowiec currentSurowiec:surowiecData){
+            if(generator.nextFloat()>0.5){
+                getAssets().addNowySurowiec(new stackSurowcow(currentSurowiec,generator.nextFloat()+generator.nextInt(10000)));
+            }
+        }
+        for(waluta currentWaluta:walutaData){
+            if(generator.nextFloat()>0.5){
+                getAssets().addNowaWaluta(new stackWalut(currentWaluta,generator.nextFloat()+generator.nextInt(100000)));
+            }
+        }
+    }
+
     public void zlecKupno(zleceniaKupnaSprzedazy zleceniaData,List<rynekWalut> rynkiWalut, List<rynekSurowcow>rynkiSurowcow,List<rynekAkcji> rynkiAkcjiData){
         Random generator = new Random();
         if(assets.getWaluty().size()>0){
             for(rynekWalut currentRynek:rynkiWalut){
                 for(waluta currentWaluta:currentRynek.getListaWalut()){
                         for(stackWalut currentStackWalut:assets.getWaluty()){
-                            if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>1 && !currentWaluta.equals(currentStackWalut.getWaluta())){
+                            if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>2 && !currentWaluta.equals(currentStackWalut.getWaluta()) && currentRynek.getListaWalut().contains(currentStackWalut.getWaluta())){
                                 zleceniaData.addZlecenieKupna(new zlecenie(this,currentWaluta,currentStackWalut.getWaluta()));
                                 break;
                             }
@@ -99,7 +118,7 @@ public class podmiotKupujacy extends Thread {
         for(rynekWalut currentRynek:rynkiWalut){
                 for(stackWalut currentStackWalut:assets.getWaluty()){
                         for(waluta currentWaluta:currentRynek.getListaWalut()){
-                            if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>1 && !currentStackWalut.getWaluta().equals(currentWaluta)){
+                            if(agresja>generator.nextFloat() && currentStackWalut.getIlosc()>2 && !currentStackWalut.getWaluta().equals(currentWaluta)&& currentRynek.getListaWalut().contains(currentStackWalut.getWaluta())){
                                 zleceniaData.addZlecenieSprzedazy(new zlecenie(this,currentWaluta,currentStackWalut.getWaluta()));
                             }
                         }
@@ -129,6 +148,9 @@ public class podmiotKupujacy extends Thread {
 
     public SimpleStringProperty getImieProperty(){
         return new SimpleStringProperty(imie);
+    }
+    public SimpleStringProperty getTypProperty(){
+        return new SimpleStringProperty(typ);
     }
 
     public SimpleStringProperty getNazwiskoProperty(){

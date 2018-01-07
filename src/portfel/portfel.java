@@ -1,6 +1,7 @@
 package portfel;
 
 import aktywa.aktywa;
+import aktywa.jednostkaUczestnictwa;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -10,11 +11,13 @@ public class portfel {
     private ObservableList<stackAkcji> akcje;
     private ObservableList<stackWalut> waluty;
     private ObservableList<stackSurowcow> surowce;
+    private ObservableList<stackJednostekUczestnictwa> jednostkiUczestnictwa;
 
     public portfel(){
         akcje = FXCollections.observableArrayList();
         waluty = FXCollections.observableArrayList();
         surowce = FXCollections.observableArrayList();
+        jednostkiUczestnictwa=FXCollections.observableArrayList();
     }
 
     public stackWalut getStackWaluty(aktywa waluta){
@@ -43,6 +46,15 @@ public class portfel {
         return null;
     }
 
+    public stackJednostekUczestnictwa getStackJednostekUczestnictwa(jednostkaUczestnictwa jednostkaUczestnictwa){
+        for(stackJednostekUczestnictwa currentStackJednostek:jednostkiUczestnictwa){
+            if(currentStackJednostek.getJednostkaUczestnictwa().equals(jednostkaUczestnictwa)){
+                return currentStackJednostek;
+            }
+        }
+        return null;
+    }
+
     public void addNowaAkcja(stackAkcji akcje){
         this.akcje.add(akcje);
     }
@@ -54,6 +66,8 @@ public class portfel {
     public void addNowaWaluta(stackWalut waluta){
         this.waluty.add(waluta);
     }
+
+    public void addNowaJednostkaUczestnictwa(stackJednostekUczestnictwa jednostkaUczestnictwa){this.jednostkiUczestnictwa.add(jednostkaUczestnictwa);}
 
     public ObservableList<stackAkcji> getAkcje() {
         return akcje;
@@ -77,5 +91,13 @@ public class portfel {
 
     public void setSurowce(ObservableList<stackSurowcow> surowce) {
         this.surowce = surowce;
+    }
+
+    public ObservableList<stackJednostekUczestnictwa> getJednostkiUczestnictwa() {
+        return jednostkiUczestnictwa;
+    }
+
+    public void setJednostkiUczestnictwa(ObservableList<stackJednostekUczestnictwa> jednostkiUczestnictwa) {
+        this.jednostkiUczestnictwa = jednostkiUczestnictwa;
     }
 }

@@ -140,8 +140,8 @@ public class aktywaEdytorController {
                 else daneRynku.addsurowiecData(new surowiec(rynkiSurowcowComboBox.getValue(),daneRynku.getWalutaData(),nazwaTextField.getText()));
             }
             if(aktywoComboBox.getValue()=="Spolka" && daneRynku.getRynkiAkcjiData().size()!=0){
-                if (nazwaTextField.getText() == null || nazwaTextField.getText().trim().isEmpty())daneRynku.addspolkaData(new spolka(rynkiAkcjiComboBox.getValue(),daneRynku.getInwestorData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),daneRynku.getNazwy().getNazweSpolki(),daneRynku.getNazwy()));
-                else daneRynku.addspolkaData(new spolka(rynkiAkcjiComboBox.getValue(),daneRynku.getInwestorData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),nazwaTextField.getText(),daneRynku.getNazwy()));
+                if (nazwaTextField.getText() == null || nazwaTextField.getText().trim().isEmpty())daneRynku.addspolkaData(new spolka(rynkiAkcjiComboBox.getValue(),daneRynku.getInwestorData(),daneRynku.getPodmiotKupujacyData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),daneRynku.getNazwy().getNazweSpolki(),daneRynku.getNazwy()));
+                else daneRynku.addspolkaData(new spolka(rynkiAkcjiComboBox.getValue(),daneRynku.getInwestorData(),daneRynku.getPodmiotKupujacyData(),daneRynku.getWalutaData(),daneRynku.getSurowiecData(),daneRynku.getAkcjeData(),daneRynku.getRatioKupujacychDoAktyw(),nazwaTextField.getText(),daneRynku.getNazwy()));
 
             }
         }else{

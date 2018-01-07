@@ -17,6 +17,7 @@ public class rynekSurowcow extends rynek {
     }
 
     public void defaultRynekSurowcowConstructor(){
+        setTypRynku("Surowce");
         Random generator = new Random();
         setMarza(generator.nextFloat()/4);
     }

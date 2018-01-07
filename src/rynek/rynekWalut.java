@@ -21,6 +21,7 @@ public class rynekWalut extends rynek {
     }
 
     public void defaultRynekWalutConstructor(){
+        setTypRynku("Waluty");
         Random generator = new Random();
         setMarza(generator.nextFloat()/4);
     }

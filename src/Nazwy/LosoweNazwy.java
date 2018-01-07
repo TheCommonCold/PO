@@ -18,6 +18,7 @@ public class LosoweNazwy {
     private ArrayList<String> listaNazwSpolek = new ArrayList<String>();
     private ArrayList<String> listaImionInwestorow = new ArrayList<String>();
     private ArrayList<String> listaNazwiskInwestorow = new ArrayList<String>();
+    private ArrayList<String> listaNazwFunduszy = new ArrayList<String>();
 
 
     public LosoweNazwy(){
@@ -29,6 +30,7 @@ public class LosoweNazwy {
         wczytajPlik(listaNazwSpolek,"src/Nazwy/NazwySpolek");
         wczytajPlik(listaImionInwestorow ,"src/Nazwy/ImionaInwestorow");
         wczytajPlik(listaNazwiskInwestorow,"src/Nazwy/NazwiskaInwestorow");
+        wczytajPlik(listaNazwFunduszy,"src/Nazwy/NazwyFunduszy","src/Nazwy/NazwyFunduszyVol2");
     }
 
     private void wczytajPlik(ArrayList<String> lista,String lokalizacjaPliku){
@@ -41,6 +43,22 @@ public class LosoweNazwy {
         }
         catch(IOException e){
             System.out.print("Ni mo pliku ");System.out.print(lokalizacjaPliku);System.out.print(" panie \n");
+        }
+    }
+
+    private void wczytajPlik(ArrayList<String> lista,String lokalizacjaPliku1,String lokalizacjaPliku2){
+        try {
+            BufferedReader reader1 = new BufferedReader(new FileReader(lokalizacjaPliku1));
+            BufferedReader reader2 = new BufferedReader(new FileReader(lokalizacjaPliku2));
+            String line1,line2;
+            while((line1=reader1.readLine())!=null){
+                while((line2=reader2.readLine())!=null) {
+                    lista.add(line1+" "+line2);
+                }
+            }
+        }
+        catch(IOException e){
+            System.out.print("Ni mo pliku ");System.out.print(lokalizacjaPliku1);System.out.print(" panie \n");
         }
     }
 
@@ -88,5 +106,9 @@ public class LosoweNazwy {
 
     public String getNazwiskoInwestora() {
         return getNazwa(listaNazwiskInwestorow,false);
+    }
+
+    public String getNazweFunduszu() {
+        return getNazwa(listaNazwFunduszy,true);
     }
 }

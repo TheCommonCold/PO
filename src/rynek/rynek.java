@@ -1,5 +1,7 @@
 package rynek;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class rynek {
     private String nazwa;
     private float marza;
@@ -19,4 +21,16 @@ public class rynek {
     public void setMarza(float marza) {
         this.marza = marza;
     }
+    public String typRynku;
+
+    public String getTypRynku() {
+        return typRynku;
+    }
+
+    public void setTypRynku(String typRynku) {
+        this.typRynku = typRynku;
+    }
+
+    public SimpleStringProperty getTypRynkuPropery(){return new SimpleStringProperty(typRynku);}
+    public SimpleStringProperty getNazwaProperty(){return new SimpleStringProperty(nazwa);}
 }

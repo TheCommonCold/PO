@@ -6,12 +6,13 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.aktywaController">
+<AnchorPane prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.aktywaController">
    <children>
       <SplitPane dividerPositions="0.445141065830721" layoutX="183.0" layoutY="156.0" prefHeight="533.0" prefWidth="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -28,7 +29,7 @@
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane fx:id="walutaPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane fx:id="walutaPane" minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="360.0">
                <children>
                   <Label layoutY="6.0" prefHeight="17.0" prefWidth="357.0" text="Informacje o aktywie" />
                   <GridPane fx:id="walutyGrid" layoutY="23.0" prefHeight="531.0" prefWidth="357.0" visible="false" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
@@ -50,11 +51,11 @@
                         <Label fx:id="rynekWalutyLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
-                  <ButtonBar layoutY="428.0" prefHeight="53.0" prefWidth="316.0" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="428.0">
+                  <ButtonBar fx:id="wykupBar" layoutX="224.0" layoutY="411.0" prefHeight="90.0" prefWidth="271.0" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="224.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="411.0">
                      <buttons>
-                      <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <Label text="Wykup Akcje" />
+                        <TextField fx:id="cenaWykupuField" />
+                        <Button fx:id="wykupButton" mnemonicParsing="false" onAction="#handleWykup" text="Button" />
                      </buttons>
                   </ButtonBar>
                   <TableView fx:id="cenyTable" layoutX="-3.0" layoutY="231.0" prefHeight="200.0" prefWidth="323.0" visible="false" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="231.0">

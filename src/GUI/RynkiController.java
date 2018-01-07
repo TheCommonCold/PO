@@ -24,7 +24,8 @@ public class RynkiController {
     public void setDaneRynku(DaneRynku daneRynku) {
         this.daneRynku = daneRynku;
         rynkiTable.setItems(daneRynku.getRynekData());
-        nazwaColumn.setCellValueFactory(cellData -> cellData.getValue().get);
+        nazwaColumn.setCellValueFactory(cellData -> cellData.getValue().getNazwaProperty());
+        typColumn.setCellValueFactory(cellData -> cellData.getValue().getTypRynkuPropery());
         rynkiTable.getSelectionModel().selectedItemProperty().addListener(
                 ((observable, oldValue, newValue) -> showRynki(newValue) )
         );

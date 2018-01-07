@@ -20,6 +20,7 @@ public class rynekAkcji extends rynek{
 
     public void defaultRynekAkcjiConstructor (ObservableList<waluta> walutaData){
         Random generator = new Random();
+        setTypRynku("Akcje");
         int ktoraWaluta = generator.nextInt(walutaData.size());
         int i=0;
         for(waluta currentWaluta:walutaData){

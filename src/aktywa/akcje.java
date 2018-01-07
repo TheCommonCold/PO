@@ -13,7 +13,7 @@ public class akcje extends aktywa {
 
     public akcje(rynekAkcji rynek, spolka spolka){
         this.spolka=spolka;
-        setNazwa(spolka.getName());
+        setNazwa(spolka.getNazwa());
         setRynek(rynek);
         rynek.addNewAkcja(this);
     }

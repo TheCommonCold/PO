@@ -8,7 +8,6 @@ public class stackSurowcow extends stackAktyw {
     private aktywa.surowiec surowiec;
 
     public stackSurowcow(surowiec surowiec,float ilosc){
-        Random generator = new Random();
         this.surowiec=surowiec;
         setIlosc(ilosc);
     }
