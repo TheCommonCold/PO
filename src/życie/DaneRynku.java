@@ -35,11 +35,14 @@ public class DaneRynku {
     private int liczbaAktyw = 0;
     private int liczbaWalut = 0;
     private int liczbaTur = 0;
-    private Object monitor = new Object();
+    private Object monitorZlecen = new Object();
+    private Object monitorPodmiotow =new Object();
+    private Object monitorGUI = new Object();
 
     private Main main;
     private int liczbaKupujacych = 0;
     private int ratioKupujacychDoAktyw = 2;
+    private boolean active=true;
 
     public DaneRynku() {
     }
@@ -48,12 +51,12 @@ public class DaneRynku {
         this.main = main;
     }
 
-    public Object getMonitor() {
-        return monitor;
+    public Object getMonitorZlecen() {
+        return monitorZlecen;
     }
 
-    public void setMonitor(Object monitor) {
-        this.monitor = monitor;
+    public void setMonitorZlecen(Object monitorZlecen) {
+        this.monitorZlecen = monitorZlecen;
     }
 
     public void refresh() {
@@ -61,7 +64,27 @@ public class DaneRynku {
     }
 
     public void load() {
+        System.out.print("test1");
+        active=false;
+        for(PodmiotKupujacy currentPodmiot:inwestorData )
+        {
+            currentPodmiot.halt();
+        }
+        for(Spolka currentSpolka:spolkaData){
+            currentSpolka.halt();
+        }
+        synchronized (monitorZlecen) {
+            try {
+                monitorZlecen.notifyAll();
+            } catch (Exception e) {
+
+            }
+        }
+        System.out.print("test2");
+        System.out.print("test3");
+        this.logicLoop();
         godSaveUsAll.load();
+        System.out.print("test4");
     }
 
     public void save() {
@@ -90,28 +113,30 @@ public class DaneRynku {
     }
 
     public void wykonajOperacjeKupnaSprzedazy() {
-        for (Zlecenie currentSprzedaz : zlecenia.getZleceniaSprzedazy()) {
-            for (Zlecenie currentKupno : zlecenia.getZleceniaKupna()) {
-                if (currentSprzedaz.getChceSprzedac().equals(currentKupno.getChceKupic()) && currentSprzedaz.getChceKupic().equals(currentKupno.getChceSprzedac())) {
-                    operacjeKupnaSprzedazyWalut(currentSprzedaz, currentKupno);
-                    operacjeKupnaSprzedazySurowcow(currentSprzedaz, currentKupno);
-                    operacjeKupnaSprzedazyAkcji(currentSprzedaz, currentKupno);
+        synchronized (monitorPodmiotow){
+            for (Zlecenie currentSprzedaz : zlecenia.getZleceniaSprzedazy()) {
+                for (Zlecenie currentKupno : zlecenia.getZleceniaKupna()) {
+                    if (currentSprzedaz.getChceSprzedac().equals(currentKupno.getChceKupic()) && currentSprzedaz.getChceKupic().equals(currentKupno.getChceSprzedac())) {
+                        operacjeKupnaSprzedazyWalut(currentSprzedaz, currentKupno);
+                        operacjeKupnaSprzedazySurowcow(currentSprzedaz, currentKupno);
+                        operacjeKupnaSprzedazyAkcji(currentSprzedaz, currentKupno);
+                    }
                 }
             }
+            for (Zlecenie currentSprzedaz : zlecenia.getZleceniaSprzedazy()) {
+                updateCenWalut(currentSprzedaz);
+                updateCenaSurowca(currentSprzedaz);
+                updateCenaAkcji(currentSprzedaz);
+            }
+            for (Zlecenie currentKupno : zlecenia.getZleceniaKupna()) {
+                updateCenWalut(currentKupno);
+                updateCenaSurowca(currentKupno);
+                updateCenaAkcji(currentKupno);
+            }
         }
-        for (Zlecenie currentSprzedaz : zlecenia.getZleceniaSprzedazy()) {
-            updateCenWalut(currentSprzedaz);
-            updateCenaSurowca(currentSprzedaz);
-            updateCenaAkcji(currentSprzedaz);
-        }
-        for (Zlecenie currentKupno : zlecenia.getZleceniaKupna()) {
-            updateCenWalut(currentKupno);
-            updateCenaSurowca(currentKupno);
-            updateCenaAkcji(currentKupno);
-        }
-        synchronized (monitor) {
+        synchronized (monitorZlecen) {
             try {
-                monitor.notifyAll();
+                monitorZlecen.notifyAll();
             } catch (Exception e) {
 
             }
@@ -557,31 +582,48 @@ public class DaneRynku {
         }
     }
 
+    public Object getMonitorPodmiotow() {
+        return monitorPodmiotow;
+    }
+
+    public void setMonitorPodmiotow(Object monitorPodmiotow) {
+        this.monitorPodmiotow = monitorPodmiotow;
+    }
+
+    public Object getMonitorGUI() {
+        return monitorGUI;
+    }
+
+    public void setMonitorGUI(Object monitorGUI) {
+        this.monitorGUI = monitorGUI;
+    }
 
     public void logicLoop() {
         new Thread(new Runnable() {
             public void run() {
-                while (1 > 0) {
+                while (active==true) {
                     setLiczbaAktyw(getAktywaData().size());
                     setLiczbaKupujacych(getPodmiotKupujacyData().size());
                     setLiczbaWalut(getWalutaData().size());
-
-                    if (getLiczbaAktyw() * getRatioKupujacychDoAktyw() > getLiczbaKupujacych()) {
-                        for (int i = getLiczbaKupujacych(); i < getLiczbaAktyw() * getRatioKupujacychDoAktyw(); i++) {
-                            addinwestorData(new Inwestor(getDaneRynku(), nazwy));
-                            if (i % 2 == 0) addFunduszInwestycyjny(new FunduszInwestycyjny(getDaneRynku(), nazwy));
+                        synchronized (monitorPodmiotow) {
+                            if (getLiczbaAktyw() * getRatioKupujacychDoAktyw() > getLiczbaKupujacych()) {
+                                for (int i = getLiczbaKupujacych(); i < getLiczbaAktyw() * getRatioKupujacychDoAktyw(); i++) {
+                                    addinwestorData(new Inwestor(getDaneRynku(), nazwy));
+                                    if (i % 2 == 0)
+                                        addFunduszInwestycyjny(new FunduszInwestycyjny(getDaneRynku(), nazwy));
+                                }
+                            }
+                            watkiRun();
+                            zapisywanieWartosic();
+                            wypuszczanieNowychAkcji();
+                            refresh();
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            wykonajOperacjeKupnaSprzedazy();
                         }
-                    }
-                    watkiRun();
-                    zapisywanieWartosic();
-                    wypuszczanieNowychAkcji();
-                    refresh();
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    wykonajOperacjeKupnaSprzedazy();
                     getZlecenia().resetZlecenia();
                     liczbaTur++;
                 }

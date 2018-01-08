@@ -9,6 +9,10 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import kupujacy.PodmiotKupujacy;
+import portfel.StackAkcji;
+import portfel.StackSurowcow;
+import portfel.StackWalut;
 import rynek.RynekAkcji;
 import rynek.RynekWalut;
 import spolka.Spolka;
@@ -21,7 +25,7 @@ public class AktywaController {
     DaneRynku daneRynku;
     Spolka currentlySelectedSpolka;
     @FXML
-    private TableView<Aktywa> walutaTable;
+    private TableView<Aktywa> aktywaTable;
     @FXML
     private TableView<CenaWaluty> cenyTable;
     @FXML
@@ -117,12 +121,28 @@ public class AktywaController {
 
     public void setDaneRynku(DaneRynku daneRynku) {
         this.daneRynku = daneRynku;
-        walutaTable.setItems(daneRynku.getAktywaData());
+        aktywaTable.setItems(daneRynku.getAktywaData());
     }
 
     public void handleWykup() {
         Random generator = new Random();
         currentlySelectedSpolka.wykupAkcji(daneRynku.getPodmiotKupujacyData(), Float.parseFloat(cenaWykupuField.getText()));
+    }
+
+    @FXML
+    public void handleDelete(){
+
+
+            daneRynku.getAktywaData().remove(aktywaTable.getSelectionModel().getSelectedItem());
+            if(aktywaTable.getSelectionModel().getSelectedItem() instanceof  Waluta){
+                daneRynku.getWalutaData().remove(aktywaTable.getSelectionModel().getSelectedItem());
+            }
+            if(aktywaTable.getSelectionModel().getSelectedItem() instanceof  Surowiec){
+                daneRynku.getSurowiecData().remove(aktywaTable.getSelectionModel().getSelectedItem());
+            }
+            if(aktywaTable.getSelectionModel().getSelectedItem() instanceof  Akcje){
+                daneRynku.getAkcjeData().remove(aktywaTable.getSelectionModel().getSelectedItem());
+            }
     }
 
     @FXML
@@ -142,7 +162,7 @@ public class AktywaController {
         cenaKupnaColumn.setCellValueFactory(cellData -> cellData.getValue().getCenaKupnaProperty());
         cenaSprzedazyColumn.setCellValueFactory(cellData -> cellData.getValue().getCenaSprzedazyProperty());
         hideStuff();
-        walutaTable.getSelectionModel().selectedItemProperty().addListener(
+        aktywaTable.getSelectionModel().selectedItemProperty().addListener(
                 ((observable, oldValue, newValue) -> showWaluta(newValue))
         );
     }
@@ -209,7 +229,7 @@ public class AktywaController {
     }
 
     public void refresh() {
-        walutaTable.refresh();
+        aktywaTable.refresh();
         cenyTable.refresh();
     }
 

@@ -4,6 +4,7 @@ import aktywa.Akcje;
 import aktywa.Aktywa;
 import aktywa.Surowiec;
 import aktywa.Waluta;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kupujacy.FunduszInwestycyjny;
 import kupujacy.Inwestor;
@@ -60,17 +61,17 @@ public class Serializer {
     public void load() {
         try {
             ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("C:\\Users\\Public\\Documents\\zapis.txt")));
-            daneRynku.setAktywaData(((ObservableList<Aktywa>) in.readObject()));
-            daneRynku.setAkcjeData(((ObservableList<Akcje>) in.readObject()));
-            daneRynku.setWalutaData(((ObservableList<Waluta>) in.readObject()));
-            daneRynku.setSurowiecData(((ObservableList<Surowiec>) in.readObject()));
-            daneRynku.setRynekData(((ObservableList<Rynek>) in.readObject()));
-            daneRynku.setRynkiAkcjiData(((ObservableList<RynekAkcji>) in.readObject()));
-            daneRynku.setRynkiWalutData(((ObservableList<RynekWalut>) in.readObject()));
-            daneRynku.setRynkiSurowcowData(((ObservableList<RynekSurowcow>) in.readObject()));
-            daneRynku.setPodmiotKupujacyData(((ObservableList<PodmiotKupujacy>) in.readObject()));
-            daneRynku.setInwestorData(((ObservableList<Inwestor>) in.readObject()));
-            daneRynku.setFunduszInwestycyjnyData(((ObservableList<FunduszInwestycyjny>) in.readObject()));
+            daneRynku.setAktywaData(FXCollections.observableArrayList(((ArrayList<Aktywa>) in.readObject())));
+            daneRynku.setAkcjeData(FXCollections.observableArrayList(((ArrayList<Akcje>) in.readObject())));
+            daneRynku.setWalutaData(FXCollections.observableArrayList(((ArrayList<Waluta>) in.readObject())));
+            daneRynku.setSurowiecData(FXCollections.observableArrayList(((ArrayList<Surowiec>) in.readObject())));
+            daneRynku.setRynekData(FXCollections.observableArrayList(((ArrayList<Rynek>) in.readObject())));
+            daneRynku.setRynkiAkcjiData(FXCollections.observableArrayList(((ArrayList<RynekAkcji>) in.readObject())));
+            daneRynku.setRynkiWalutData(FXCollections.observableArrayList(((ArrayList<RynekWalut>) in.readObject())));
+            daneRynku.setRynkiSurowcowData(FXCollections.observableArrayList(((ArrayList<RynekSurowcow>) in.readObject())));
+            daneRynku.setPodmiotKupujacyData(FXCollections.observableArrayList(((ArrayList<PodmiotKupujacy>) in.readObject())));
+            daneRynku.setInwestorData(FXCollections.observableArrayList(((ArrayList<Inwestor>) in.readObject())));
+            daneRynku.setFunduszInwestycyjnyData(FXCollections.observableArrayList(((ArrayList<FunduszInwestycyjny>) in.readObject())));
             for (PodmiotKupujacy currentPodmiot : daneRynku.getPodmiotKupujacyData()) {
                 currentPodmiot.getAssets().wczyt();
             }

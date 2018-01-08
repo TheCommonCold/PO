@@ -20,6 +20,7 @@ public abstract class PodmiotKupujacy extends Thread implements Serializable {
     private float agresja;
     private String typ;
     private transient DaneRynku daneRynku;
+    private boolean active=true;
 
 
     public float getAgresja() {
@@ -156,15 +157,16 @@ public abstract class PodmiotKupujacy extends Thread implements Serializable {
         return new SimpleStringProperty(nazwisko);
     }
 
+    public void halt(){active=false;}
 
     public void run() {
         Random generator = new Random();
-        while (1 > 0) {
+        while (active==true) {
             zlecKupno();
             zlecSprzedaz();
-            synchronized (daneRynku.getMonitor()) {
+            synchronized (daneRynku.getMonitorZlecen()) {
                 try {
-                    daneRynku.getMonitor().wait();
+                    daneRynku.getMonitorZlecen().wait();
                 } catch (Exception e) {
 
                 }

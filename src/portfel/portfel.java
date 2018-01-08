@@ -35,10 +35,27 @@ public class Portfel implements Serializable {
     }
 
     public void wczyt() {
-        akcje.clear();
-        waluty.clear();
-        surowce.clear();
-        jednostkiUczestnictwa.clear();
+        try {
+            akcje.clear();
+        }catch(NullPointerException e){
+            akcje=FXCollections.observableArrayList();
+        }
+        try {
+            waluty.clear();
+        }catch(NullPointerException e){
+            waluty=FXCollections.observableArrayList();
+        }
+
+        try {
+            surowce.clear();
+        }catch(NullPointerException e){
+            surowce=FXCollections.observableArrayList();
+        }
+        try {
+            jednostkiUczestnictwa.clear();
+        }catch(NullPointerException e){
+            jednostkiUczestnictwa=FXCollections.observableArrayList();
+        }
         akcje.addAll(akcjeZapis);
         waluty.addAll(walutyZapis);
         surowce.addAll(surowceZapis);

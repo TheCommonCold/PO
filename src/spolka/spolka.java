@@ -30,6 +30,8 @@ public class Spolka extends Thread {
     private float wartoscPoczatkowa;
     private boolean chceWypuscic = false;
     private float obroty;
+    private boolean active=true;
+    private DaneRynku daneRynku;
 
     public Spolka(RynekAkcji rynek, DaneRynku daneRynku, int ratioKupujacychDoAktyw, LosoweNazwy nazwy) {
         Random generator = new Random();
@@ -54,6 +56,7 @@ public class Spolka extends Thread {
         for (int i = 0; i < ratioKupujacychDoAktyw; i++) {
             daneRynku.getInwestorData().add(new Inwestor(daneRynku, nazwy));
         }
+        daneRynku=daneRynku.getDaneRynku();
         Random generator = new Random();
         akcja = new Akcje(rynek, this);
         dataPierwszejWyceny = new Date();
@@ -94,9 +97,9 @@ public class Spolka extends Thread {
         }
     }
 
-    public void wypuscNoweAkcje(ObservableList<PodmiotKupujacy> podmiotKupujacyData) {
+    public synchronized void wypuscNoweAkcje(ObservableList<PodmiotKupujacy> podmiotKupujacyData) {
         Random generator = new Random();
-        if (chceWypuscic) {
+        if (generator.nextFloat() < 0.8) {
             for (PodmiotKupujacy currentPodmiot : podmiotKupujacyData) {
                 if (generator.nextFloat() < 0.1) {
                     int temp = generator.nextInt(100);
@@ -112,19 +115,23 @@ public class Spolka extends Thread {
         }
     }
 
+    public void halt(){active=false;}
+
     public void run() {
         Random generator = new Random();
         int counter = 0;
-        while (1 > 0) {
+        while (active==true) {
             if (counter == 5) {
                 generateZysk();
                 generateKursOtwarcia();
             }
-            if (generator.nextFloat() < 0.08) chceWypuscic = true;
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            synchronized (daneRynku.getMonitorPodmiotow()) {
+                wypuscNoweAkcje(daneRynku.getPodmiotKupujacyData());
             }
             counter++;
         }

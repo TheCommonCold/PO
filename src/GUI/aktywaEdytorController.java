@@ -115,6 +115,7 @@ public class AktywaEdytorController {
         rynkiSurowcowComboBox.setVisible(false);
     }
 
+
     public void handleOkButton() {
         if (addAktywaCheckBox.isSelected()) {
             if (aktywoComboBox.getValue() == "Waluta" && daneRynku.getRynkiWalutData().size() != 0) {

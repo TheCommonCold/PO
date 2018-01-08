@@ -43,9 +43,12 @@ public class Inwestor extends PodmiotKupujacy {
             }
             zlecKupno();
             zlecSprzedaz();
-            synchronized (getDaneRynku().getMonitor()) {
+            synchronized (getDaneRynku().getMonitorPodmiotow()) {
+                kupJednostkiUczestnictwa();
+            }
+            synchronized (getDaneRynku().getMonitorZlecen()) {
                 try {
-                    getDaneRynku().getMonitor().wait();
+                    getDaneRynku().getMonitorZlecen().wait();
                 } catch (Exception e) {
 
                 }
@@ -67,7 +70,7 @@ public class Inwestor extends PodmiotKupujacy {
         return new SimpleStringProperty(Double.toString(pesel));
     }
 
-    public void kupJednostkiUczestnictwa() {
+    public synchronized void kupJednostkiUczestnictwa() {
         Random generator = new Random();
         if (!getDaneRynku().getFunduszInwestycyjnyData().isEmpty() && !getAssets().getWaluty().isEmpty()) {
             for (FunduszInwestycyjny currentFundusz : getDaneRynku().getFunduszInwestycyjnyData()) {
