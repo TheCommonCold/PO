@@ -79,7 +79,6 @@ public class Serializer {
                 currentRynekAkcji.wczyt();
             }
 
-
             in.close();
         } catch (IOException e) {
             e.printStackTrace();

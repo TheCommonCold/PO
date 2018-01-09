@@ -18,18 +18,18 @@ import java.util.Random;
 
 public class DaneRynku {
     private Serializer godSaveUsAll = new Serializer(this);
-    private ObservableList<Aktywa> aktywaData = FXCollections.observableArrayList();
-    private ObservableList<RynekWalut> rynkiWalutData = FXCollections.observableArrayList();
-    private ObservableList<RynekSurowcow> rynkiSurowcowData = FXCollections.observableArrayList();
-    private ObservableList<RynekAkcji> rynkiAkcjiData = FXCollections.observableArrayList();
-    private ObservableList<Akcje> akcjeData = FXCollections.observableArrayList();
-    private ObservableList<Waluta> walutaData = FXCollections.observableArrayList();
-    private ObservableList<Surowiec> surowiecData = FXCollections.observableArrayList();
-    private ObservableList<Spolka> spolkaData = FXCollections.observableArrayList();
-    private ObservableList<Inwestor> inwestorData = FXCollections.observableArrayList();
-    private ObservableList<Rynek> rynekData = FXCollections.observableArrayList();
-    private ObservableList<FunduszInwestycyjny> funduszInwestycyjnyData = FXCollections.observableArrayList();
-    private ObservableList<PodmiotKupujacy> podmiotKupujacyData = FXCollections.observableArrayList();
+    private volatile ObservableList<Aktywa> aktywaData = FXCollections.observableArrayList();
+    private volatile ObservableList<RynekWalut> rynkiWalutData = FXCollections.observableArrayList();
+    private volatile ObservableList<RynekSurowcow> rynkiSurowcowData = FXCollections.observableArrayList();
+    private volatile ObservableList<RynekAkcji> rynkiAkcjiData = FXCollections.observableArrayList();
+    private volatile ObservableList<Akcje> akcjeData = FXCollections.observableArrayList();
+    private volatile ObservableList<Waluta> walutaData = FXCollections.observableArrayList();
+    private volatile ObservableList<Surowiec> surowiecData = FXCollections.observableArrayList();
+    private volatile ObservableList<Spolka> spolkaData = FXCollections.observableArrayList();
+    private volatile ObservableList<Inwestor> inwestorData = FXCollections.observableArrayList();
+    private volatile ObservableList<Rynek> rynekData = FXCollections.observableArrayList();
+    private volatile ObservableList<FunduszInwestycyjny> funduszInwestycyjnyData = FXCollections.observableArrayList();
+    private volatile ObservableList<PodmiotKupujacy> podmiotKupujacyData = FXCollections.observableArrayList();
     private ZleceniaKupnaSprzedazy zlecenia = new ZleceniaKupnaSprzedazy();
     private LosoweNazwy nazwy = new LosoweNazwy();
     private int liczbaAktyw = 0;
@@ -37,7 +37,7 @@ public class DaneRynku {
     private int liczbaTur = 0;
     private Object monitorZlecen = new Object();
     private Object monitorPodmiotow =new Object();
-    private Object monitorGUI = new Object();
+    private Boolean monitorGUI = true;
 
     private Main main;
     private int liczbaKupujacych = 0;
@@ -81,6 +81,7 @@ public class DaneRynku {
             }
         }
         System.out.print("test2");
+        active=true;
         System.out.print("test3");
         this.logicLoop();
         godSaveUsAll.load();
@@ -594,8 +595,8 @@ public class DaneRynku {
         return monitorGUI;
     }
 
-    public void setMonitorGUI(Object monitorGUI) {
-        this.monitorGUI = monitorGUI;
+    public void setMonitorGUI(boolean bool) {
+        this.monitorGUI = bool;
     }
 
     public void logicLoop() {
