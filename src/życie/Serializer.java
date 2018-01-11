@@ -61,19 +61,19 @@ public class Serializer {
     public void load() {
         try {
             ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("C:\\Users\\Public\\Documents\\zapis.txt")));
-            daneRynku.setAktywaData(FXCollections.observableArrayList(((ArrayList<Aktywa>) in.readObject())));
-            daneRynku.setAkcjeData(FXCollections.observableArrayList(((ArrayList<Akcje>) in.readObject())));
-            daneRynku.setWalutaData(FXCollections.observableArrayList(((ArrayList<Waluta>) in.readObject())));
-            daneRynku.setSurowiecData(FXCollections.observableArrayList(((ArrayList<Surowiec>) in.readObject())));
-            daneRynku.setRynekData(FXCollections.observableArrayList(((ArrayList<Rynek>) in.readObject())));
-            daneRynku.setRynkiAkcjiData(FXCollections.observableArrayList(((ArrayList<RynekAkcji>) in.readObject())));
-            daneRynku.setRynkiWalutData(FXCollections.observableArrayList(((ArrayList<RynekWalut>) in.readObject())));
-            daneRynku.setRynkiSurowcowData(FXCollections.observableArrayList(((ArrayList<RynekSurowcow>) in.readObject())));
-            daneRynku.setPodmiotKupujacyData(FXCollections.observableArrayList(((ArrayList<PodmiotKupujacy>) in.readObject())));
-            daneRynku.setInwestorData(FXCollections.observableArrayList(((ArrayList<Inwestor>) in.readObject())));
-            daneRynku.setFunduszInwestycyjnyData(FXCollections.observableArrayList(((ArrayList<FunduszInwestycyjny>) in.readObject())));
+            daneRynku.getAktywaData().setAll((ArrayList<Aktywa>) in.readObject());
+            daneRynku.getAkcjeData().setAll((ArrayList<Akcje>) in.readObject());
+            daneRynku.getWalutaData().setAll((ArrayList<Waluta>) in.readObject());
+            daneRynku.getSurowiecData().setAll((ArrayList<Surowiec>) in.readObject());
+            daneRynku.getRynekData().setAll((ArrayList<Rynek>) in.readObject());
+            daneRynku.getRynkiAkcjiData().setAll((ArrayList<RynekAkcji>) in.readObject());
+            daneRynku.getRynkiWalutData().setAll((ArrayList<RynekWalut>) in.readObject());
+            daneRynku.getRynkiSurowcowData().setAll((ArrayList<RynekSurowcow>) in.readObject());
+            daneRynku.getPodmiotKupujacyData().setAll((ArrayList<PodmiotKupujacy>) in.readObject());
+            daneRynku.getInwestorData().setAll((ArrayList<Inwestor>) in.readObject());
+            daneRynku.getFunduszInwestycyjnyData().setAll((ArrayList<FunduszInwestycyjny>) in.readObject());
             for (PodmiotKupujacy currentPodmiot : daneRynku.getPodmiotKupujacyData()) {
-                currentPodmiot.getAssets().wczyt();
+                currentPodmiot.wczyt(daneRynku);
             }
             for (RynekAkcji currentRynekAkcji : daneRynku.getRynkiAkcjiData()) {
                 currentRynekAkcji.wczyt();

@@ -80,11 +80,11 @@ public class DaneRynku {
 
             }
         }
+        godSaveUsAll.load();
         System.out.print("test2");
         active=true;
         System.out.print("test3");
         this.logicLoop();
-        godSaveUsAll.load();
         System.out.print("test4");
     }
 

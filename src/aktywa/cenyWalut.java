@@ -4,11 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CenyWalut implements Serializable {
     private Waluta Waluta;
-    private transient ObservableList<CenaWaluty> wartosc = FXCollections.observableArrayList();
+    private List<CenaWaluty> wartosc = new ArrayList<>();
     private List<CenaWaluty> wartoscZapis;
 
     public CenyWalut(Waluta Waluta) {
@@ -28,7 +29,7 @@ public class CenyWalut implements Serializable {
     }
 
     public ObservableList<CenaWaluty> getWartosc() {
-        return wartosc;
+        return FXCollections.observableArrayList(wartosc);
     }
 
     public void setWartosc(ObservableList<CenaWaluty> wartosc) {

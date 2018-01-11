@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class Aktywa implements Serializable {
     private String nazwa;
 
-    private transient Rynek Rynek;
+    private Rynek Rynek;
     private List<Float> listaWartosci = new ArrayList<>();
 
     public Rynek getRynek() {

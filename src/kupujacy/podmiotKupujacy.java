@@ -182,4 +182,9 @@ public abstract class PodmiotKupujacy extends Thread implements Serializable {
     public void setDaneRynku(DaneRynku daneRynku) {
         this.daneRynku = daneRynku;
     }
+
+    public void wczyt(DaneRynku daneRynku){
+        assets.wczyt();
+        this.daneRynku=daneRynku;
+    }
 }

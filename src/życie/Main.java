@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kupujacy.Inwestor;
@@ -58,6 +59,7 @@ public class Main extends Application {
             loader.setLocation(MainGUIController.class.getResource("GUI.fxml"));
             GUI = (BorderPane) loader.load();
             Scene scene = new Scene(GUI);
+            scene.getStylesheets().add("CSS/CSS.css");
             cont = loader.getController();
             cont.setDaneRynku(this.daneRynku, this);
             cont.aktywaController();

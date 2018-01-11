@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Xolonium';
+    src: url('Font.otf');
+}
+
+.root{
+    -fx-font: 12px Xolonium;
+    -fx-base: rgb(109, 0, 135);
+    -fx-background: rgb(69, 0, 75);
+}
