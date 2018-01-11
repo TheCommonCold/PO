@@ -37,7 +37,7 @@ public class DaneRynku {
     private int liczbaTur = 0;
     private Object monitorZlecen = new Object();
     private Object monitorPodmiotow =new Object();
-    private Boolean monitorGUI = true;
+    private Boolean monitorGUI = false;
 
     private Main main;
     private int liczbaKupujacych = 0;
@@ -599,10 +599,15 @@ public class DaneRynku {
         this.monitorGUI = bool;
     }
 
+
+
     public void logicLoop() {
         new Thread(new Runnable() {
             public void run() {
                 while (active==true) {
+                    getMonitorPodmiotow();
+                    System.out.print(liczbaTur);System.out.print("\n");
+                    while(monitorGUI==true){System.out.print(monitorGUI);};
                     setLiczbaAktyw(getAktywaData().size());
                     setLiczbaKupujacych(getPodmiotKupujacyData().size());
                     setLiczbaWalut(getWalutaData().size());
@@ -615,8 +620,8 @@ public class DaneRynku {
                                 }
                             }
                             watkiRun();
-                            zapisywanieWartosic();
                             wypuszczanieNowychAkcji();
+                            zapisywanieWartosic();
                             refresh();
                             try {
                                 Thread.sleep(2000);

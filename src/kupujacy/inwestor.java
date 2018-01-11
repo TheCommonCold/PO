@@ -97,7 +97,7 @@ public class Inwestor extends PodmiotKupujacy {
 
     public void zwiekszenieBudzetu() {
         Random generator = new Random();
-        if (generator.nextFloat() < 0.05 && getAssets().getWaluty().size() > 0) {
+        if (getAssets().getWaluty().size() > 0) {
             int ktoraWaluta = generator.nextInt(getAssets().getWaluty().size());
             int i = 0;
             for (StackWalut currentWaluta : getAssets().getWaluty()) {

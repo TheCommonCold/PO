@@ -117,11 +117,6 @@ public class AktywaEdytorController {
 
 
     public void handleOkButton() {
-        synchronized (daneRynku.getMonitorZlecen()){
-            try{
-                daneRynku.getMonitorZlecen().wait();
-            }catch(Exception e){}
-        }
         if (addAktywaCheckBox.isSelected()) {
             if (aktywoComboBox.getValue() == "Waluta" && daneRynku.getRynkiWalutData().size() != 0) {
                 if (nazwaTextField.getText() == null || nazwaTextField.getText().trim().isEmpty())
@@ -159,7 +154,6 @@ public class AktywaEdytorController {
                 else daneRynku.addRynkiAkcjiData(new RynekAkcji(daneRynku.getWalutaData(), nazwaTextField.getText()));
             }
         }
-        daneRynku.setMonitorGUI(true);
     }
 
     public void setDaneRynku(DaneRynku daneRynku) {

@@ -125,24 +125,31 @@ public class AktywaController {
     }
 
     public void handleWykup() {
-        Random generator = new Random();
         currentlySelectedSpolka.wykupAkcji(daneRynku.getPodmiotKupujacyData(), Float.parseFloat(cenaWykupuField.getText()));
     }
 
     @FXML
     public void handleDelete(){
-
-
+        daneRynku.setMonitorGUI(true);
+        synchronized (daneRynku.getMonitorPodmiotow()) {
             daneRynku.getAktywaData().remove(aktywaTable.getSelectionModel().getSelectedItem());
-            if(aktywaTable.getSelectionModel().getSelectedItem() instanceof  Waluta){
+            if (aktywaTable.getSelectionModel().getSelectedItem() instanceof Waluta) {
                 daneRynku.getWalutaData().remove(aktywaTable.getSelectionModel().getSelectedItem());
             }
-            if(aktywaTable.getSelectionModel().getSelectedItem() instanceof  Surowiec){
+            if (aktywaTable.getSelectionModel().getSelectedItem() instanceof Surowiec) {
                 daneRynku.getSurowiecData().remove(aktywaTable.getSelectionModel().getSelectedItem());
             }
-            if(aktywaTable.getSelectionModel().getSelectedItem() instanceof  Akcje){
+            if (aktywaTable.getSelectionModel().getSelectedItem() instanceof Akcje) {
                 daneRynku.getAkcjeData().remove(aktywaTable.getSelectionModel().getSelectedItem());
             }
+            for(PodmiotKupujacy currentPodmiot:daneRynku.getPodmiotKupujacyData()){
+                    currentPodmiot.getAssets().getWaluty().remove(currentPodmiot.getAssets().getStackWaluty(aktywaTable.getSelectionModel().getSelectedItem()));
+                    currentPodmiot.getAssets().getSurowce().remove(currentPodmiot.getAssets().getStackSurowcow(aktywaTable.getSelectionModel().getSelectedItem()));
+                    currentPodmiot.getAssets().getAkcje().remove(currentPodmiot.getAssets().getStackAkcji(aktywaTable.getSelectionModel().getSelectedItem()));
+            }
+        }
+        daneRynku.getZlecenia().resetZlecenia();
+        daneRynku.setMonitorGUI(false);
     }
 
     @FXML

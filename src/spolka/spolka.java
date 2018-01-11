@@ -35,7 +35,7 @@ public class Spolka extends Thread {
 
     public Spolka(RynekAkcji rynek, DaneRynku daneRynku, int ratioKupujacychDoAktyw, LosoweNazwy nazwy) {
         Random generator = new Random();
-        name = Integer.toString(generator.nextInt());
+        name = nazwy.getNazweSpolki();
         defaultSpolkaConstructor(rynek, daneRynku, ratioKupujacychDoAktyw, nazwy);
     }
 
@@ -56,6 +56,7 @@ public class Spolka extends Thread {
         for (int i = 0; i < ratioKupujacychDoAktyw; i++) {
             daneRynku.getInwestorData().add(new Inwestor(daneRynku, nazwy));
         }
+        this.daneRynku=daneRynku;
         daneRynku=daneRynku.getDaneRynku();
         Random generator = new Random();
         akcja = new Akcje(rynek, this);
@@ -97,9 +98,12 @@ public class Spolka extends Thread {
         }
     }
 
-    public synchronized void wypuscNoweAkcje(ObservableList<PodmiotKupujacy> podmiotKupujacyData) {
+
+    public void halt(){active=false;}
+
+    public void wypuscNoweAkcje(ObservableList<PodmiotKupujacy> podmiotKupujacyData) {
         Random generator = new Random();
-        if (generator.nextFloat() < 0.8) {
+        if (chceWypuscic) {
             for (PodmiotKupujacy currentPodmiot : podmiotKupujacyData) {
                 if (generator.nextFloat() < 0.1) {
                     int temp = generator.nextInt(100);
@@ -115,23 +119,19 @@ public class Spolka extends Thread {
         }
     }
 
-    public void halt(){active=false;}
-
     public void run() {
         Random generator = new Random();
         int counter = 0;
-        while (active==true) {
+        while (1 > 0) {
             if (counter == 5) {
                 generateZysk();
                 generateKursOtwarcia();
             }
+            if (generator.nextFloat() < 0.08) chceWypuscic = true;
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-            synchronized (daneRynku.getMonitorPodmiotow()) {
-                wypuscNoweAkcje(daneRynku.getPodmiotKupujacyData());
             }
             counter++;
         }
